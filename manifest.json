@@ -9,10 +9,12 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": ["storage"],
+  "permissions": [
+    "storage"
+  ],
   "host_permissions": [
-    "*://www.youtube.com/*",
-    "*://www.instagram.com/*"
+    "https://www.youtube.com/*",
+    "https://www.instagram.com/*"
   ],
   "action": {
     "default_popup": "src/popup/index.html",
@@ -31,18 +33,23 @@
   "content_scripts": [
     {
       "js": ["src/bootstrap/antiflicker.ts"],
-      "matches": ["*://www.youtube.com/*", "*://www.instagram.com/*"],
+      "matches": ["https://www.youtube.com/*", "https://www.instagram.com/*"],
       "run_at": "document_start"
     },
     {
       "js": ["src/content/youtube/index.ts"],
-      "matches": ["*://www.youtube.com/*"],
+      "matches": ["https://www.youtube.com/*"],
       "run_at": "document_idle"
     },
     {
       "js": ["src/content/instagram/index.ts"],
-      "matches": ["*://www.instagram.com/*"],
+      "matches": ["https://www.instagram.com/*"],
       "run_at": "document_idle"
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "feed-free-ext@anisharyal.com"
+    }
+  }
 }

@@ -156,6 +156,10 @@ Add intentional friction to your social media usage for a true digital detox.
 
 > *Note: These are just a basic theoretical outline. Features may be reimagined or changed entirely as development continues. (Open to new ideas and suggestions!)*
 
+## Privacy
+
+Feed Free - Unbiased Feed (FF-UF) is built with privacy in mind. It operates entirely locally in your browser and does not collect, store, or transmit any user data. See the detailed [PRIVACY.md](PRIVACY.md) policy for more information.
+
 ---
 
 ## License

@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **In-Player Overlay Options**: A customizable sub-setting to choose between a pure black screen or a black screen with a notice overlay showing text ("Music Only Mode Active") and an easy `"Switch to Video"` button.
 - **Floating Player Toggle Button**: Sleek semi-transparent control pill ("🎵 Music Mode") positioned at the top-right of the YouTube player that appears on hover, permitting instant control right from the player interface.
 - **Ko-fi Support**: Icon added at the footer 
-- **Updated Documentation**: Screenshots of the popup added in `README.md`.
+- **Updated Documentation**: Added a detailed `PRIVACY.md` policy file and updated `README.md` with popup screenshots and a styled changelog reference.
 
 ### Changed
 - **Footer UI Spacing**: Distributed all footer links (Security Status, Ko-fi Support, Developer Site, and Version Tag) evenly across the width of the popup.
