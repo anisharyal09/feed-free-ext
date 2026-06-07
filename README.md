@@ -2,9 +2,17 @@
 
 Take control of your social media feeds. Block algorithmic recommendations, Shorts, Reels, suggested content, comments, and more on YouTube and Instagram. Works seamlessly with SPA navigation — no page reload required.
 
-> **Load from `dist/chrome/` or `dist/firefox/`** — not the source folder. See [Installation](#installation).
+
+<p align="center">
+  <img src="assets/youtube.png" alt="YouTube Feed Free" width="49%" />
+  <img src="assets/instagram.png" alt="Instagram Feed Free" width="49%" />
+  <br>
+  <em>Screenshots of Popup UI with Youtube and Instagram Controls (Left-to-Right).</em>
+</p>
 
 ---
+> [!NOTE]
+> See [CHANGELOG.md](CHANGELOG.md) for detailed version updates and release logs.
 
 ## Features
 
@@ -13,7 +21,7 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 - **Hide Shorts** — Remove Shorts from sidebar and homepage
 - **Hide Sidebar Recs** — Clear suggested videos next to the player
 - **Hide Comments** — Remove the entire comments section
-- **Music Mode** — Black out the video player (keep audio playing)
+- **Music Mode** — Black out the video player (keep audio playing) with a floating toggle button on the player UI to switch back-and-forth directly, plus an optional screen overlay.
 
 ### Instagram
 - **Following Feed** — Auto-redirect to the Following timeline instead of the algorithmic Home feed

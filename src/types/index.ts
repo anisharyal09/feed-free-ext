@@ -4,6 +4,7 @@ export interface YouTubeState {
   nukeSidebarRecs: boolean
   nukeComments: boolean
   musicOnlyMode: boolean
+  musicOnlyShowOverlay: boolean
 }
 
 export interface InstagramState {

@@ -47,9 +47,22 @@ export function YouTubePanel() {
         checked={state.youtube.musicOnlyMode}
         disabled={disabled}
         activeColor={activeColor}
-        isLast
+        isLast={!state.youtube.musicOnlyMode}
         onChange={(v) => setYouTube({ musicOnlyMode: v })}
       />
+      {state.youtube.musicOnlyMode && (
+        <div style={{ paddingLeft: '16px', borderLeft: '2px solid var(--border)', marginLeft: '10px' }}>
+          <Row
+            label="Show Screen Overlay"
+            hint="Display visualizer & controls on black screen"
+            checked={state.youtube.musicOnlyShowOverlay}
+            disabled={disabled}
+            activeColor={activeColor}
+            isLast
+            onChange={(v) => setYouTube({ musicOnlyShowOverlay: v })}
+          />
+        </div>
+      )}
       <div style={{ height: '24px' }} />
     </div>
   )
