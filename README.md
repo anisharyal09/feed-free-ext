@@ -17,19 +17,35 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 ## Features
 
 ### YouTube
-- **Hide Home Feed** — Remove the algorithmic video grid from youtube.com
-- **Hide Shorts** — Remove Shorts from sidebar and homepage
-- **Hide Sidebar Recs** — Clear suggested videos next to the player
-- **Hide Comments** — Remove the entire comments section
-- **Music Mode** — Black out the video player (keep audio playing) with a floating toggle button on the player UI to switch back-and-forth directly, plus an optional screen overlay.
+- **Hide Home Feed** — Remove the algorithmic video grid from youtube.com.
+- **Hide Shorts** — Remove Shorts from sidebar and homepage.
+- **Hide Shorts Everywhere** — Remove Shorts tab and thumbnails from channel pages.
+- **Hide Recommendations** — Clear suggested recommendations next to/below the player and playlist pages (leaves playlists visible).
+- **Hide Entire Sidebar** — Completely hide the sidebar, stretching the video player to full width.
+- **Hide Comments** — Remove the entire comments section.
+- **Hide End Screens** — Remove video card overlays at the end of videos.
+- **Hide Subscriptions** — Remove Subscriptions link from guide/sidebar.
+- **Hide Explore** — Remove Trending/Explore links from guide/sidebar.
+- **Hide Report History** — Remove Report History link from guide/sidebar.
+- **Hide More from YouTube** — Remove the "More from YouTube" category block from the guide/sidebar.
+- **Dynamic Music Mode** — Black out the video player (keep audio playing) with a floating toggle button on the player UI to switch back-and-forth directly, plus an optional screen overlay.
+- **Grayscale Mode** — Turn YouTube completely black & white.
 
 ### Instagram
-- **Following Feed** — Auto-redirect to the Following timeline instead of the algorithmic Home feed
-- **Redirect to DMs** — Go straight to `/direct/inbox/` on open instead of the feed
-- **Hide DMs** — Remove DM navigation and redirect away from the messages inbox
-- **Hide Reels** — Remove Reels from navigation and auto-redirect away
-- **Hide Explore** — Remove the Explore tab and auto-redirect
-- **Conflict Resolution** — Choose redirect target (Profile or Saved) when both "Redirect to DMs" and "Hide DMs" are enabled simultaneously
+- **Following Feed** — Auto-redirect to the Following timeline instead of the algorithmic Home feed.
+- **Redirect to DMs** — Go straight to `/direct/inbox/` on open instead of the feed.
+- **Hide DMs** — Remove DM navigation and redirect away from the messages inbox.
+- **Hide Reels** — Remove Reels from sidebar/navigation menus (keeping profile reels visible) and auto-redirect away from `/reels/`.
+- **Hide Explore** — Remove the Explore tab and auto-redirect.
+- **Hide Stories (Home)** — Remove the top stories tray from the home feed.
+- **Hide Stories Everywhere** — Completely remove the stories tray, highlights, and story rings (plus auto-redirect from `/stories/`).
+- **Square Profile Photos** — Render profile pictures and story rings as soft squares.
+- **Hide Notes** — Block status note bubbles from profiles and inbox.
+- **Hide Likes** — Remove likes counts on posts, reels, hover cards, and profile page follower counts.
+- **Hide Notifications** — Remove notifications tab from sidebar.
+- **Hide Comments** — Remove comment sections, comment counts, icons, and input forms from posts/reels.
+- **Conflict Resolution** — Choose redirect target (Profile or Saved) when both "Redirect to DMs" and "Hide DMs" are enabled simultaneously.
+- **Grayscale Mode** — Turn Instagram completely black & white.
 
 ### Global
 - **Master toggle** — Enable/disable all blocking at once (Feed Free Active / Inactive)
@@ -130,7 +146,7 @@ A 3-second `setInterval` in each content script periodically re-applies CSS rule
 ---
 
 ## Acknowledgements
-- [IG Plus Extension](https://github.com/ptjaworski/igplus-extension) —for Instagram architecture.
+- Inspiration [IG Plus Extension](https://github.com/ptjaworski/igplus-extension) for Instagram architecture.
 
 ---
 
@@ -143,12 +159,21 @@ A 3-second `setInterval` in each content script periodically re-applies CSS rule
 
 ---
 
+## Support & Feedback
+
+If you encounter bugs, have feature suggestions, or want to share feedback:
+- **Email Contact**: Click [Support & Feedback](mailto:anish.creations.hq@gmail.com?subject=[Feed%20Free%20Extension]%20Support%20/%20Feedback) to open your email client.
+  * *Important*: Please make sure the subject line begins with `[Feed Free Extension or FFUF ext or similar]` (prefilled in the link) so we can easily categorize and answer it.
+- **Issues**: Open a bug report or request a new feature on our [GitHub repository](https://github.com/anisharyal09/feed-free-ext).
+
+---
+
 ## Roadmap
 
 ### Phase 2 — The Unified Unbiased Engine *(Core Feature)*
 The main upcoming feature is a shared data engine that feeds unmanipulated, randomly discovered, or educational content to both platforms, creating a custom Unbiased Feed!
-- **YouTube Injection**: Pull unbiased videos and Shorts into a custom home feed.
-- **Instagram Side-Injection**: Inject random educational content (or cross-platform YouTube Shorts) directly into the Instagram interface, or to any other platform.
+- **YouTube Injection**: Pull unbiased random videos/shorts into a custom or home feed.
+- **Instagram Side-Injection**: Inject insta reels randomly if possible by any means (or cross-platform random YouTube Shorts) directly into the Instagram interface, else any other platform resources (like wikipedia random content).
 - **Architecture Designed for Expansion**: The engine's data pipeline will feed into any supported platform beyond YouTube and Instagram.
 
 ### Phase 3 — The Lock *(Behavioral Control)*

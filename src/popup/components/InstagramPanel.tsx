@@ -90,8 +90,85 @@ export function InstagramPanel() {
         checked={state.instagram.nukeExplore}
         disabled={disabled}
         activeColor={activeColor}
-        isLast
         onChange={(v) => setInstagram({ nukeExplore: v })}
+      />
+
+      <Row
+        label="Hide Stories (Home)"
+        hint="Remove the stories tray from the home feed"
+        checked={state.instagram.nukeStoriesEverywhere || state.instagram.nukeStoriesHome}
+        disabled={disabled || state.instagram.nukeStoriesEverywhere}
+        activeColor={activeColor}
+        onChange={(v) => setInstagram({ nukeStoriesHome: v })}
+      />
+      <div style={{ paddingLeft: '16px', borderLeft: '2px solid var(--border)', marginLeft: '10px' }}>
+        <Row
+          label="Hide Stories Everywhere"
+          hint="Remove stories tray, highlights, and story rings"
+          checked={state.instagram.nukeStoriesEverywhere}
+          disabled={disabled}
+          activeColor={activeColor}
+          onChange={(v) => {
+            if (v) {
+              setInstagram({ nukeStoriesEverywhere: true, nukeStoriesHome: true })
+            } else {
+              setInstagram({ nukeStoriesEverywhere: false })
+            }
+          }}
+        />
+      </div>
+
+      <Row
+        label="Square Profile Photos"
+        hint="Render profile avatars as perfect squares"
+        checked={state.instagram.squareProfile}
+        disabled={disabled}
+        activeColor={activeColor}
+        onChange={(v) => setInstagram({ squareProfile: v })}
+      />
+
+      <Row
+        label="Hide Notes"
+        hint="Block status note bubbles from profiles and inbox"
+        checked={state.instagram.nukeNotes}
+        disabled={disabled}
+        activeColor={activeColor}
+        onChange={(v) => setInstagram({ nukeNotes: v })}
+      />
+
+      <Row
+        label="Hide Likes"
+        hint="Hide like counts on posts and reels"
+        checked={state.instagram.hideLikes}
+        disabled={disabled}
+        activeColor={activeColor}
+        onChange={(v) => setInstagram({ hideLikes: v })}
+      />
+
+      <Row
+        label="Hide Notifications"
+        hint="Remove notifications tab from sidebar"
+        checked={state.instagram.nukeNotifications}
+        disabled={disabled}
+        activeColor={activeColor}
+        onChange={(v) => setInstagram({ nukeNotifications: v })}
+      />
+      <Row
+        label="Hide Comments"
+        hint="Hide comments list, counts, and forms on posts and reels"
+        checked={state.instagram.hideComments}
+        disabled={disabled}
+        activeColor={activeColor}
+        onChange={(v) => setInstagram({ hideComments: v })}
+      />
+      <Row
+        label="Grayscale Mode"
+        hint="Turn Instagram completely black & white"
+        checked={state.instagram.grayMode}
+        disabled={disabled}
+        activeColor={activeColor}
+        isLast
+        onChange={(v) => setInstagram({ grayMode: v })}
       />
       <div style={{ height: '24px' }} />
     </div>

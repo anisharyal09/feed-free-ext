@@ -2,9 +2,17 @@ export interface YouTubeState {
   nukeHomeFeed: boolean
   nukeShorts: boolean
   nukeSidebarRecs: boolean
+  nukeSidebar: boolean
   nukeComments: boolean
+  nukeEndScreens: boolean
+  nukeSubscriptions: boolean
+  nukeExplore: boolean
+  nukeReportHistory: boolean
+  nukeMoreFromYouTube: boolean
   musicOnlyMode: boolean
   musicOnlyShowOverlay: boolean
+  grayMode: boolean
+  nukeShortsFromProfiles: boolean
 }
 
 export interface InstagramState {
@@ -14,6 +22,14 @@ export interface InstagramState {
   nukeExplore: boolean
   blockDMs: boolean
   conflictRedirectTarget: 'profile' | 'saved'
+  grayMode: boolean
+  squareProfile: boolean
+  nukeNotifications: boolean
+  hideComments: boolean
+  nukeNotes: boolean
+  hideLikes: boolean
+  nukeStoriesHome: boolean
+  nukeStoriesEverywhere: boolean
 }
 
 export interface FeedFreeState {

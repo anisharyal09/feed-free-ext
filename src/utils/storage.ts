@@ -12,6 +12,27 @@ const migrations: Record<string, MigrationFn> = {
     if (ig) delete ig.showUnbiasedFeed
     return data
   },
+  '1.2.0': (data) => {
+    const ig = data.instagram as Record<string, unknown> | undefined
+    if (ig) {
+      if ('hideLikesCounts' in ig) {
+        ig.hideLikes = !!ig.hideLikesCounts
+      } else if (!('hideLikes' in ig)) {
+        ig.hideLikes = false
+      }
+
+      if ('nukeComments' in ig || 'hideCommentsCounts' in ig) {
+        ig.hideComments = !!ig.nukeComments || !!ig.hideCommentsCounts
+      } else if (!('hideComments' in ig)) {
+        ig.hideComments = false
+      }
+
+      delete ig.hideLikesCounts
+      delete ig.hideCommentsCounts
+      delete ig.nukeComments
+    }
+    return data
+  },
 }
 
 function applyMigrations(raw: Record<string, unknown>): FeedFreeState {
@@ -44,8 +65,18 @@ export async function loadState(): Promise<FeedFreeState> {
       return defaults
     }
     const migrated = applyMigrations(raw)
-    await chrome.storage.local.set({ [STORAGE_KEY]: migrated })
-    return migrated
+    
+    // Deep merge migrated state with defaults to ensure all keys exist (e.g. grayMode)
+    const defaults = createDefaultState()
+    const merged: FeedFreeState = {
+      ...defaults,
+      ...migrated,
+      youtube: { ...defaults.youtube, ...migrated.youtube },
+      instagram: { ...defaults.instagram, ...migrated.instagram },
+    }
+    
+    await chrome.storage.local.set({ [STORAGE_KEY]: merged })
+    return merged
   } catch {
     const defaults = createDefaultState()
     await chrome.storage.local.set({ [STORAGE_KEY]: defaults })

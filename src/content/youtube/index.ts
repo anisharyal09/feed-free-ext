@@ -66,6 +66,9 @@ function manageMusicOverlay(state: FeedFreeState): void {
         transform-origin: bottom;
         animation: ff-bounce 1.2s ease-in-out infinite;
       }
+      .ff-paused .ff-wave-bar {
+        animation-play-state: paused;
+      }
       @keyframes ff-bounce {
         0%, 100% { transform: scaleY(0.25); }
         50% { transform: scaleY(1); }
@@ -138,6 +141,18 @@ function manageMusicOverlay(state: FeedFreeState): void {
     document.documentElement.appendChild(style)
   }
 
+  const syncAnimationState = () => {
+    const overlay = document.getElementById('ff-music-overlay')
+    if (!overlay) return
+    const video = document.querySelector('#movie_player video') as HTMLVideoElement | null
+    const isPaused = video ? video.paused : true
+    if (isPaused) {
+      overlay.classList.add('ff-paused')
+    } else {
+      overlay.classList.remove('ff-paused')
+    }
+  }
+
   if (!isGlobalEnabled || !player) {
     existingOverlay?.remove()
     existingToggle?.remove()
@@ -193,6 +208,19 @@ function manageMusicOverlay(state: FeedFreeState): void {
         player.appendChild(existingOverlay)
       }
     }
+
+    // Bind event listeners to video play/pause to sync visualizer animation state
+    const video = document.querySelector('#movie_player video') as HTMLVideoElement & { __ffListenersAttached?: boolean } | null
+    if (video) {
+      if (!video.__ffListenersAttached) {
+        video.__ffListenersAttached = true
+        video.addEventListener('play', syncAnimationState)
+        video.addEventListener('playing', syncAnimationState)
+        video.addEventListener('pause', syncAnimationState)
+        video.addEventListener('ended', syncAnimationState)
+      }
+      syncAnimationState()
+    }
   } else {
     existingOverlay?.remove()
   }
@@ -241,6 +269,138 @@ function manageMusicOverlay(state: FeedFreeState): void {
   }
 }
 
+const shadowObservers = new WeakMap<ShadowRoot, MutationObserver>()
+
+function injectShadowStyles(state: FeedFreeState): void {
+  try {
+    const cssLines: string[] = []
+
+    if (state.globalEnabled) {
+      if (state.youtube.nukeEndScreens) {
+        cssLines.push(`
+          .ytp-ce-element,
+          .ytp-ce-element-show,
+          .ytp-endscreen,
+          .html5-endscreen,
+          .ytp-endscreen-content,
+          .ytp-upnext,
+          .ytp-upnext-autoplay-icon,
+          .ytp-ce-covering-overlay,
+          .ytp-ce-covering-image,
+          .ytp-videowall-still,
+          .ytp-modern-videowall-still,
+          .ytp-suggestion-set,
+          .ytp-fullscreen-grid-main-content,
+          .ytp-fullscreen-grid-stills-container {
+            display: none !important;
+          }
+        `)
+      }
+
+      if (state.youtube.musicOnlyMode) {
+        cssLines.push(`
+          video {
+            opacity: 0 !important;
+          }
+          .html5-video-container {
+            background: #000 !important;
+          }
+          #movie_player {
+            background-color: #000 !important;
+          }
+        `)
+      }
+    }
+
+    const css = cssLines.join('\n')
+    const styleId = 'ff-shadow-styles'
+
+    const ensureStyleInShadow = (shadow: ShadowRoot) => {
+      let styleEl = shadow.getElementById(styleId) as HTMLStyleElement | null
+      if (cssLines.length === 0) {
+        styleEl?.remove()
+      } else {
+        if (!styleEl) {
+          styleEl = document.createElement('style')
+          styleEl.id = styleId
+          styleEl.textContent = css
+          shadow.appendChild(styleEl)
+        } else if (styleEl.textContent !== css) {
+          styleEl.textContent = css
+        }
+      }
+    }
+
+    const findAndInject = (node: Node) => {
+      if (node instanceof HTMLElement) {
+        const shadow = node.shadowRoot
+        if (shadow) {
+          ensureStyleInShadow(shadow)
+
+          if (!shadowObservers.has(shadow)) {
+            const observer = new MutationObserver(() => {
+              if (currentState) {
+                ensureStyleInShadow(shadow)
+              }
+            })
+            observer.observe(shadow, { childList: true, subtree: true })
+            shadowObservers.set(shadow, observer)
+          }
+
+          shadow.childNodes.forEach(findAndInject)
+        }
+      }
+      node.childNodes.forEach(findAndInject)
+    }
+
+    findAndInject(document.documentElement)
+  } catch (e) {
+    err('injectShadowStyles failed:', e)
+  }
+}
+
+let cleanupInterval: ReturnType<typeof setInterval> | null = null
+
+function querySelectorsAllShadow(selector: string, root: Document | ShadowRoot | Element = document): Element[] {
+  const elements: Element[] = []
+  try {
+    elements.push(...Array.from(root.querySelectorAll(selector)))
+  } catch {}
+  
+  const traverse = (node: Node) => {
+    if (node instanceof HTMLElement) {
+      const shadow = node.shadowRoot
+      if (shadow) {
+        try {
+          elements.push(...Array.from(shadow.querySelectorAll(selector)))
+        } catch {}
+        shadow.childNodes.forEach(traverse)
+      }
+    }
+    node.childNodes.forEach(traverse)
+  }
+  
+  traverse(root)
+  return elements
+}
+
+function hideYouTubeEndScreensJS(): void {
+  if (!currentState?.globalEnabled || !currentState?.youtube.nukeEndScreens) return
+
+  try {
+    const selectors = '.ytp-ce-element, .ytp-endscreen, .html5-endscreen, .ytp-upnext, .ytp-ce-covering-overlay, .ytp-ce-covering-image, .ytp-videowall-still, .ytp-modern-videowall-still, .ytp-suggestion-set, .ytp-fullscreen-grid-main-content, .ytp-fullscreen-grid-stills-container'
+    const elements = querySelectorsAllShadow(selectors)
+    elements.forEach((el) => {
+      const htmlEl = el as HTMLElement
+      if (htmlEl.style.display !== 'none') {
+        htmlEl.style.setProperty('display', 'none', 'important')
+      }
+    })
+  } catch (e) {
+    err('hideYouTubeEndScreensJS failed:', e)
+  }
+}
+
 function applyRules(state: FeedFreeState): void {
   currentState = state
   const rules = getActiveRules(state)
@@ -249,6 +409,11 @@ function applyRules(state: FeedFreeState): void {
     updateStyles(rules)
     removeAntiflicker()
     manageMusicOverlay(state)
+    injectShadowStyles(state)
+    hideYouTubeEndScreensJS()
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+    }, 100)
   } catch (e) {
     err('applyRules failed:', e)
   }
@@ -259,6 +424,29 @@ function teardownAll(): void {
   document.getElementById('ff-music-overlay')?.remove()
   document.getElementById('ff-music-toggle-btn')?.remove()
   document.getElementById('ff-music-ui-style')?.remove()
+  if (cleanupInterval !== null) {
+    clearInterval(cleanupInterval)
+    cleanupInterval = null
+  }
+  try {
+    const removeShadowStyles = (node: Node) => {
+      if (node instanceof HTMLElement) {
+        const shadow = node.shadowRoot
+        if (shadow) {
+          shadow.getElementById('ff-shadow-styles')?.remove()
+          const obs = shadowObservers.get(shadow)
+          if (obs) {
+            obs.disconnect()
+          }
+          shadow.childNodes.forEach(removeShadowStyles)
+        }
+      }
+      node.childNodes.forEach(removeShadowStyles)
+    }
+    removeShadowStyles(document.documentElement)
+  } catch (e) {
+    err('Failed to clean shadow styles:', e)
+  }
   patrol?.disconnect()
   patrol = null
   if (heartbeat !== null) {
@@ -288,6 +476,8 @@ function setupHeartbeat(): void {
     try {
       if (!currentState?.globalEnabled) return
       manageMusicOverlay(currentState)
+      injectShadowStyles(currentState)
+      hideYouTubeEndScreensJS()
       
       const rules = getActiveRules(currentState)
       if (rules.length === 0) return
@@ -297,6 +487,15 @@ function setupHeartbeat(): void {
       err('Heartbeat failed:', e)
     }
   }, 3000)
+}
+
+function setupCleanupInterval(): void {
+  if (cleanupInterval) return
+  cleanupInterval = setInterval(() => {
+    if (currentState?.globalEnabled) {
+      hideYouTubeEndScreensJS()
+    }
+  }, 1000)
 }
 
 function handleStateChange(state: FeedFreeState): void {
@@ -318,6 +517,7 @@ function handleStateChange(state: FeedFreeState): void {
     applyRules(state)
     setupPatron()
     setupHeartbeat()
+    setupCleanupInterval()
   } catch (e) {
     err('handleStateChange failed:', e)
   }
@@ -371,6 +571,7 @@ async function init(): Promise<void> {
         applyRules(state)
         setupPatron()
         setupHeartbeat()
+        setupCleanupInterval()
       }
     }
 

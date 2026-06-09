@@ -4,18 +4,68 @@ import type { FeedFreeState, SelectorRule, YouTubeState, InstagramState } from '
 
 const AF_STYLE_ID = 'ff-antiflicker'
 
-const YOUTUBE_TOGGLES: Record<keyof Pick<YouTubeState, 'nukeHomeFeed' | 'nukeShorts' | 'nukeSidebarRecs' | 'nukeComments'>, string> = {
+const YOUTUBE_TOGGLES: Record<
+  keyof Pick<
+    YouTubeState,
+    | 'nukeHomeFeed'
+    | 'nukeShorts'
+    | 'nukeSidebarRecs'
+    | 'nukeSidebar'
+    | 'nukeComments'
+    | 'nukeEndScreens'
+    | 'nukeSubscriptions'
+    | 'nukeExplore'
+    | 'nukeReportHistory'
+    | 'nukeMoreFromYouTube'
+    | 'grayMode'
+    | 'nukeShortsFromProfiles'
+  >,
+  string
+> = {
   nukeHomeFeed: 'homeFeed',
   nukeShorts: 'shorts',
   nukeSidebarRecs: 'sidebarRecs',
+  nukeSidebar: 'sidebar',
   nukeComments: 'comments',
+  nukeEndScreens: 'endScreens',
+  nukeSubscriptions: 'subscriptions',
+  nukeExplore: 'explore',
+  nukeReportHistory: 'reportHistory',
+  nukeMoreFromYouTube: 'moreFromYouTube',
+  grayMode: 'grayMode',
+  nukeShortsFromProfiles: 'shortsProfiles',
 }
 
-const INSTAGRAM_TOGGLES: Record<keyof Pick<InstagramState, 'nukeMainFeed' | 'nukeReels' | 'nukeExplore' | 'blockDMs'>, string> = {
+const INSTAGRAM_TOGGLES: Record<
+  keyof Pick<
+    InstagramState,
+    | 'nukeMainFeed'
+    | 'nukeReels'
+    | 'nukeExplore'
+    | 'blockDMs'
+    | 'grayMode'
+    | 'squareProfile'
+    | 'nukeNotifications'
+    | 'hideComments'
+    | 'nukeNotes'
+    | 'hideLikes'
+    | 'nukeStoriesHome'
+    | 'nukeStoriesEverywhere'
+  >,
+  string
+> = {
   nukeMainFeed: 'mainFeed',
   nukeReels: 'reels',
   nukeExplore: 'explore',
   blockDMs: 'dms',
+  grayMode: 'grayMode',
+  squareProfile: 'squareProfile',
+  nukeNotifications: 'notifications',
+  hideComments: 'comments',
+  nukeNotes: 'notes',
+  hideLikes: 'likes',
+  nukeStoriesHome: 'storiesHome',
+  nukeStoriesEverywhere: 'storiesEverywhere',
 }
 
 function injectCSS(css: string): void {

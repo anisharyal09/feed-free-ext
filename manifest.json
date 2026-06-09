@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Feed Free - Unbiased Feed (FF - UF)",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Take control of your feed. Block algorithmic recommendations, shorts, reels, and more on YouTube and Instagram.",
   "icons": {
     "16": "icons/icon16.png",
@@ -49,7 +49,12 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "feed-free-ext@anisharyal.com"
+      "id": "feed-free-ext@anisharyal.com",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
     }
   }
 }
