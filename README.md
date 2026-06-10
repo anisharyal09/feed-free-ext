@@ -10,7 +10,7 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
   </a>
   <br>
   <a href="https://addons.mozilla.org/en-US/firefox/addon/feed-free-uf/">
-    <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-Under%20Review%20(v1.1.0)-orange?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" />
+    <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-v1.1.0-blue?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" />
   </a>
 </p>
 

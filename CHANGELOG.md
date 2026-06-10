@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Instagram Controls**:
   - **Hide Professional Dashboard**: Added option to hide the "Professional Dashboard" sidebar link and icon on business/creator accounts using case-insensitive matches for the URL path and accessibility labels.
-- **Documentation**: Added live Chrome Web Store (`v1.1.0`) and Firefox Add-on status badges (`Under Review`) to the README.
+- **Documentation**: Added live Chrome Web Store (`v1.1.0`) and Firefox Add-ons (`v1.1.0`) badges to the README.
 
 ### Changed
 - **Popup Footer**: Removed the personal website shortcut link from the popup interface.
