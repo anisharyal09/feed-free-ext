@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Popup Footer**: Removed the personal website shortcut link from the popup interface.
+- **Documentation**: Updated the project screenshots (`assets/youtube.png` and `assets/instagram.png`).
 
 ### Fixed
 - **YouTube End-Screens Toggle**: Fixed a bug where YouTube end screen suggestions and overlay elements remained hidden after toggling the option off. Added style clearing to reset display overrides.
