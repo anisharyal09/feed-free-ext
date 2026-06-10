@@ -243,6 +243,10 @@ export const YOUTUBE: Record<string, SelectorRule | SelectorRule[]> = {
       fallbacks: [
         'ytd-guide-section-renderer:has(a[href*="/channel/"]):not(:has(a[href^="/feed/history"])):not(:has(a[href^="/feed/you"])):not(:has(a[href^="/feed/library"])):not(:has(a[href="/"])):not(:has(a[href="/gaming"])):not(:has(a[href="/news"])):not(:has(a[href="/sports"])):not(:has(a[href^="/feed/trending"]))',
         'ytd-guide-section-renderer:has(a[href*="/user/"]):not(:has(a[href^="/feed/history"])):not(:has(a[href^="/feed/you"])):not(:has(a[href^="/feed/library"])):not(:has(a[href="/"])):not(:has(a[href="/gaming"])):not(:has(a[href="/news"])):not(:has(a[href="/sports"])):not(:has(a[href^="/feed/trending"]))',
+        'ytd-guide-section-renderer:has(a[href^="/@"]) + ytd-guide-divider-renderer',
+        'ytd-guide-section-renderer:has(a[href^="/@"]) + tp-yt-paper-divider',
+        'ytd-guide-divider-renderer:has(+ ytd-guide-section-renderer:has(a[href^="/@"]))',
+        'tp-yt-paper-divider:has(+ ytd-guide-section-renderer:has(a[href^="/@"]))',
       ],
       property: 'display',
       value: 'none',
@@ -278,6 +282,10 @@ export const YOUTUBE: Record<string, SelectorRule | SelectorRule[]> = {
         'ytd-guide-section-renderer:has(a[href="/courses"])',
         'ytd-guide-section-renderer:has(a[href="/fashion"])',
         'ytd-guide-section-renderer:has(a[href^="/feed/trending"])',
+        'ytd-guide-section-renderer:has(a[href="/gaming"]) + ytd-guide-divider-renderer',
+        'ytd-guide-section-renderer:has(a[href="/gaming"]) + tp-yt-paper-divider',
+        'ytd-guide-divider-renderer:has(+ ytd-guide-section-renderer:has(a[href="/gaming"]))',
+        'tp-yt-paper-divider:has(+ ytd-guide-section-renderer:has(a[href="/gaming"]))',
       ],
       property: 'display',
       value: 'none',
@@ -288,6 +296,16 @@ export const YOUTUBE: Record<string, SelectorRule | SelectorRule[]> = {
     fallbacks: [
       'a[href*="reporthistory"]',
       'a[href*="report_history"]',
+      'ytd-guide-section-renderer:has(a[href*="reporthistory"]) + ytd-guide-divider-renderer',
+      'ytd-guide-section-renderer:has(a[href*="report_history"]) + ytd-guide-divider-renderer',
+      'ytd-guide-entry-renderer:has(a[href*="reporthistory"]) + ytd-guide-divider-renderer',
+      'ytd-guide-entry-renderer:has(a[href*="report_history"]) + ytd-guide-divider-renderer',
+      'ytd-guide-divider-renderer:has(+ ytd-guide-section-renderer:has(a[href*="reporthistory"]))',
+      'ytd-guide-divider-renderer:has(+ ytd-guide-section-renderer:has(a[href*="report_history"]))',
+      'ytd-guide-divider-renderer:has(+ ytd-guide-entry-renderer:has(a[href*="reporthistory"]))',
+      'ytd-guide-divider-renderer:has(+ ytd-guide-entry-renderer:has(a[href*="report_history"]))',
+      'ytd-guide-section-renderer:has(a[href*="reporthistory"]):not(:has(ytd-guide-entry-renderer + ytd-guide-entry-renderer))',
+      'ytd-guide-section-renderer:has(a[href*="report_history"]):not(:has(ytd-guide-entry-renderer + ytd-guide-entry-renderer))',
     ],
     property: 'display',
     value: 'none',
@@ -353,7 +371,12 @@ export const YOUTUBE: Record<string, SelectorRule | SelectorRule[]> = {
   moreFromYouTube: [
     {
       selector: 'ytd-guide-section-renderer:has(a[href*="/premium"]):not(:has(a[href^="/feed/history"])):not(:has(a[href^="/feed/you"])):not(:has(a[href^="/feed/library"])):not(:has(a[href="/"])), ytd-guide-section-renderer:has(a[href*="music.youtube.com"]):not(:has(a[href^="/feed/history"])):not(:has(a[href^="/feed/you"])):not(:has(a[href^="/feed/library"])):not(:has(a[href="/"])), ytd-guide-section-renderer:has(a[href*="youtubekids.com"]):not(:has(a[href^="/feed/history"])):not(:has(a[href^="/feed/you"])):not(:has(a[href^="/feed/library"])):not(:has(a[href="/"])), ytd-guide-section-renderer:has(a[href*="tv.youtube.com"]):not(:has(a[href^="/feed/history"])):not(:has(a[href^="/feed/you"])):not(:has(a[href^="/feed/library"])):not(:has(a[href="/"])), ytd-guide-section-renderer:has(a[href*="studio.youtube.com"]):not(:has(a[href^="/feed/history"])):not(:has(a[href^="/feed/you"])):not(:has(a[href^="/feed/library"])):not(:has(a[href="/"]))',
-      fallbacks: [],
+      fallbacks: [
+        'ytd-guide-section-renderer:has(a[href*="/premium"]) + ytd-guide-divider-renderer',
+        'ytd-guide-section-renderer:has(a[href*="/premium"]) + tp-yt-paper-divider',
+        'ytd-guide-divider-renderer:has(+ ytd-guide-section-renderer:has(a[href*="/premium"]))',
+        'tp-yt-paper-divider:has(+ ytd-guide-section-renderer:has(a[href*="/premium"]))',
+      ],
       property: 'display',
       value: 'none',
     }
@@ -909,6 +932,20 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
     {
       selector: '[role="menu"] .x1qo8xr2.x129qt2x.xpoid6y.xx7atzb, .xzzrveb.x1h862dm.xjk3ia2.x1tb5o9v[role="menu"], section.xc3tme8.xcrlgei.xtyw845.x1682tcd>div[role="menu"], .x4afe7t.x1v7wizp.x1htlvfj.x1a5igra.xds687c.xixxii4.x17qophe.x13vifvy.x1x85hfe.x1s85apg',
       fallbacks: [],
+      property: 'display',
+      value: 'none',
+    }
+  ],
+  dashboard: [
+    {
+      selector: 'a[href*="professional_dashboard" i]',
+      fallbacks: [
+        'a[href*="dashboard" i]',
+        'a[href*="professional-dashboard" i]',
+        'a:has(svg[aria-label*="dashboard" i])',
+        'div:has(> a[href*="dashboard" i])',
+        'li:has(a[href*="dashboard" i])',
+      ],
       property: 'display',
       value: 'none',
     }

@@ -14,6 +14,7 @@ export type InstagramRuleKey =
   | 'likes'
   | 'storiesHome'
   | 'storiesEverywhere'
+  | 'dashboard'
 
 export interface ActiveRule {
   name: InstagramRuleKey
@@ -33,6 +34,7 @@ const RULE_MAP: Record<InstagramRuleKey, string> = {
   likes: 'likes',
   storiesHome: 'storiesHome',
   storiesEverywhere: 'storiesEverywhere',
+  dashboard: 'dashboard',
 }
 
 export function getActiveRules(state: FeedFreeState): ActiveRule[] {
@@ -110,6 +112,12 @@ export function getActiveRules(state: FeedFreeState): ActiveRule[] {
     rules.push({
       name: 'storiesEverywhere',
       selectors: getSelectorEntries('instagram', RULE_MAP.storiesEverywhere),
+    })
+  }
+  if (state.instagram.nukeDashboard) {
+    rules.push({
+      name: 'dashboard',
+      selectors: getSelectorEntries('instagram', RULE_MAP.dashboard),
     })
   }
 

@@ -1,6 +1,6 @@
 import type { FeedFreeState, YouTubeState, InstagramState } from '../types'
 
-export const CURRENT_VERSION = '1.2.0'
+export const CURRENT_VERSION = '1.2.1'
 
 export const DEFAULT_YOUTUBE: YouTubeState = {
   nukeHomeFeed: false,
@@ -34,6 +34,7 @@ export const DEFAULT_INSTAGRAM: InstagramState = {
   hideLikes: false,
   nukeStoriesHome: false,
   nukeStoriesEverywhere: false,
+  nukeDashboard: false,
 }
 
 export function createDefaultState(): FeedFreeState {

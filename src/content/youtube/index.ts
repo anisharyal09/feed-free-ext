@@ -7,6 +7,8 @@ import type { FeedFreeState } from '../../types'
 const log = console.log.bind(console, '[FeedFree:YouTube]')
 const err = console.error.bind(console, '[FeedFree:YouTube]')
 
+const END_SCREEN_SELECTORS = '.ytp-ce-element, .ytp-endscreen, .html5-endscreen, .ytp-upnext, .ytp-ce-covering-overlay, .ytp-ce-covering-image, .ytp-videowall-still, .ytp-modern-videowall-still, .ytp-suggestion-set, .ytp-fullscreen-grid-main-content, .ytp-fullscreen-grid-stills-container'
+
 let patrol: DOMPatron | null = null
 let currentState: FeedFreeState | null = null
 let initialized = false
@@ -384,12 +386,28 @@ function querySelectorsAllShadow(selector: string, root: Document | ShadowRoot |
   return elements
 }
 
+function restoreYouTubeEndScreensJS(): void {
+  try {
+    const elements = querySelectorsAllShadow(END_SCREEN_SELECTORS)
+    elements.forEach((el) => {
+      const htmlEl = el as HTMLElement
+      if (htmlEl.style.display === 'none') {
+        htmlEl.style.removeProperty('display')
+      }
+    })
+  } catch (e) {
+    err('restoreYouTubeEndScreensJS failed:', e)
+  }
+}
+
 function hideYouTubeEndScreensJS(): void {
-  if (!currentState?.globalEnabled || !currentState?.youtube.nukeEndScreens) return
+  if (!currentState?.globalEnabled || !currentState?.youtube.nukeEndScreens) {
+    restoreYouTubeEndScreensJS()
+    return
+  }
 
   try {
-    const selectors = '.ytp-ce-element, .ytp-endscreen, .html5-endscreen, .ytp-upnext, .ytp-ce-covering-overlay, .ytp-ce-covering-image, .ytp-videowall-still, .ytp-modern-videowall-still, .ytp-suggestion-set, .ytp-fullscreen-grid-main-content, .ytp-fullscreen-grid-stills-container'
-    const elements = querySelectorsAllShadow(selectors)
+    const elements = querySelectorsAllShadow(END_SCREEN_SELECTORS)
     elements.forEach((el) => {
       const htmlEl = el as HTMLElement
       if (htmlEl.style.display !== 'none') {
@@ -421,6 +439,7 @@ function applyRules(state: FeedFreeState): void {
 
 function teardownAll(): void {
   unmountAll()
+  restoreYouTubeEndScreensJS()
   document.getElementById('ff-music-overlay')?.remove()
   document.getElementById('ff-music-toggle-btn')?.remove()
   document.getElementById('ff-music-ui-style')?.remove()

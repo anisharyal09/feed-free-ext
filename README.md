@@ -37,6 +37,7 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 - **Hide DMs** — Remove DM navigation and redirect away from the messages inbox.
 - **Hide Reels** — Remove Reels from sidebar/navigation menus (keeping profile reels visible) and auto-redirect away from `/reels/`.
 - **Hide Explore** — Remove the Explore tab and auto-redirect.
+- **Hide Professional Dashboard** — Remove Professional Dashboard link and icon from the sidebar navigation on creator/business profiles.
 - **Hide Stories (Home)** — Remove the top stories tray from the home feed.
 - **Hide Stories Everywhere** — Completely remove the stories tray, highlights, and story rings (plus auto-redirect from `/stories/`).
 - **Square Profile Photos** — Render profile pictures and story rings as soft squares.
@@ -102,20 +103,41 @@ npm test                  # Run tests
 
 ```
 src/
-├── background/        # Service worker (storage init)
-├── bootstrap/         # document_start anti-flicker script
-├── config/            # Default state values, CSS selectors
+├── background/
+│   └── index.ts            # Service worker (storage initialization)
+├── bootstrap/
+│   └── antiflicker.ts      # document_start anti-flicker script
+├── config/
+│   ├── defaults.ts         # Default state values & version configs
+│   └── selectors.ts        # CSS element-blocking selectors
 ├── content/
-│   ├── shared/        # Injector (style element), Patron (URL poller)
-│   ├── youtube/       # YouTube content script + CSS rules
-│   └── instagram/     # Instagram content script + CSS rules
-├── popup/             # React popup UI
-│   └── components/    # Toggle, Row, platform panels
-├── types/             # TypeScript definitions
-└── utils/             # chrome.storage wrapper + migration
+│   ├── shared/
+│   │   ├── injector.ts     # Style element injector helper
+│   │   └── patron.ts       # URL polling & observer for SPA navigation
+│   ├── youtube/
+│   │   ├── index.ts        # YouTube content script main logic
+│   │   └── rules.ts        # YouTube-specific CSS selectors/rules
+│   └── instagram/
+│       ├── index.ts        # Instagram content script main logic
+│       └── rules.ts        # Instagram-specific CSS selectors/rules
+├── popup/
+│   ├── components/
+│   │   ├── InstagramPanel.tsx # Instagram toggle panel
+│   │   ├── YouTubePanel.tsx   # YouTube toggle panel
+│   │   ├── Row.tsx            # Standard setting toggle row component
+│   │   └── Toggle.tsx         # Reusable toggle switch UI component
+│   ├── PopupApp.tsx        # Main Popup React application
+│   ├── index.html          # Popup HTML entry point
+│   ├── index.tsx           # Popup React mounting logic
+│   ├── popup.css           # Styling for the Popup UI
+│   └── store.ts            # Zustand store for state sync
+├── types/
+│   └── index.ts            # TypeScript type definitions
+└── utils/
+    └── storage.ts          # chrome.storage.local wrapper & listeners
 
-manifest.json          # Chrome manifest (MV3)
-vite.config.ts         # Vite build config (dynamically builds Firefox manifest)
+manifest.json               # Chrome manifest (MV3)
+vite.config.ts              # Vite build config (dynamically builds Firefox manifest)
 ```
 
 ---
@@ -145,26 +167,23 @@ A 3-second `setInterval` in each content script periodically re-applies CSS rule
 
 ---
 
-## Acknowledgements
-- Inspiration [IG Plus Extension](https://github.com/ptjaworski/igplus-extension) for Instagram architecture.
-
----
-
 ## Troubleshooting
 
 > [!IMPORTANT]
 > **Extension Not Working?**  
 > For any issue with the extension not working or functioning correctly:
-> **_The Fix_**: **Force reload** the webpage (YouTube/Instagram). If it still doesn't work after this, kindly report the issue.
+>
+>**Force reload** the webpage (YouTube/Instagram). If it still doesn't work after this, kindly report the issue.
 
 ---
 
 ## Support & Feedback
 
 If you encounter bugs, have feature suggestions, or want to share feedback:
-- **Email Contact**: Click [Support & Feedback](mailto:anish.creations.hq@gmail.com?subject=[Feed%20Free%20Extension]%20Support%20/%20Feedback) to open your email client.
-  * *Important*: Please make sure the subject line begins with `[Feed Free Extension or FFUF ext or similar]` (prefilled in the link) so we can easily categorize and answer it.
-- **Issues**: Open a bug report or request a new feature on our [GitHub repository](https://github.com/anisharyal09/feed-free-ext).
+> **Email**: Contact us at [email address](mailto:anish.creations.hq@gmail.com?subject=[Feed%20Free%20Extension]%20Support%20/%20Feedback). Please keep the prefilled subject line intact.
+>
+> **Site**: You can also contact me directly via [anisharyal09.com.np](https://anisharyal09.com.np/#contact) (for any support, features or bugs)
+
 
 ---
 

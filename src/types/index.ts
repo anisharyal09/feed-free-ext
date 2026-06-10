@@ -30,6 +30,7 @@ export interface InstagramState {
   hideLikes: boolean
   nukeStoriesHome: boolean
   nukeStoriesEverywhere: boolean
+  nukeDashboard: boolean
 }
 
 export interface FeedFreeState {

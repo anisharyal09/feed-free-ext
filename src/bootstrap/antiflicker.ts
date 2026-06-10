@@ -51,6 +51,7 @@ const INSTAGRAM_TOGGLES: Record<
     | 'hideLikes'
     | 'nukeStoriesHome'
     | 'nukeStoriesEverywhere'
+    | 'nukeDashboard'
   >,
   string
 > = {
@@ -66,6 +67,7 @@ const INSTAGRAM_TOGGLES: Record<
   hideLikes: 'likes',
   nukeStoriesHome: 'storiesHome',
   nukeStoriesEverywhere: 'storiesEverywhere',
+  nukeDashboard: 'dashboard',
 }
 
 function injectCSS(css: string): void {

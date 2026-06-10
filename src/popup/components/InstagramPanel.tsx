@@ -162,6 +162,14 @@ export function InstagramPanel() {
         onChange={(v) => setInstagram({ hideComments: v })}
       />
       <Row
+        label="Hide Professional Dashboard"
+        hint="Remove Dashboard navigation from sidebar"
+        checked={state.instagram.nukeDashboard}
+        disabled={disabled}
+        activeColor={activeColor}
+        onChange={(v) => setInstagram({ nukeDashboard: v })}
+      />
+      <Row
         label="Grayscale Mode"
         hint="Turn Instagram completely black & white"
         checked={state.instagram.grayMode}

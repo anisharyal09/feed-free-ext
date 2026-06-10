@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.2.1] - 2026-06-10
+
+### Added
+- **Instagram Controls**:
+  - **Hide Professional Dashboard**: Added option to hide the "Professional Dashboard" sidebar link and icon on business/creator accounts using case-insensitive matches for the URL path and accessibility labels.
+
+### Fixed
+- **YouTube End-Screens Toggle**: Fixed a bug where YouTube end screen suggestions and overlay elements remained hidden after toggling the option off. Added style clearing to reset display overrides.
+- **YouTube Report History Sidebar Divider**: Fixed an issue where hiding "Report history" left an extra visual separator line above the guide footer. Now hides adjacent divider elements dynamically.
+
 ## [v1.2.0] - 2026-06-09
 
 ### Added

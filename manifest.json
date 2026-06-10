@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Feed Free - Unbiased Feed (FF - UF)",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Take control of your feed. Block algorithmic recommendations, shorts, reels, and more on YouTube and Instagram.",
   "icons": {
     "16": "icons/icon16.png",
