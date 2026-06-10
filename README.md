@@ -8,6 +8,7 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
   <a href="https://chromewebstore.google.com/detail/feed-free-unbiased-feed-f/fmmfdjmmjmkedafmhhdmoafbioakeefp">
     <img src="https://img.shields.io/badge/CHROME%20WEB%20STORE-v1.1.0-blue?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome Web Store" />
   </a>
+  
   <a href="https://addons.mozilla.org/en-US/firefox/addon/feed-free-uf/">
     <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-Under%20Review%20(v1.1.0)-orange?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" />
   </a>

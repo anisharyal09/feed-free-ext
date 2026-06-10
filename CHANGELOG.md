@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Hide Professional Dashboard**: Added option to hide the "Professional Dashboard" sidebar link and icon on business/creator accounts using case-insensitive matches for the URL path and accessibility labels.
 - **Documentation**: Added live Chrome Web Store (`v1.1.0`) and Firefox Add-on status badges (`Under Review`) to the README.
 
+### Changed
+- **Popup Footer**: Removed the personal website shortcut link from the popup interface.
+
 ### Fixed
 - **YouTube End-Screens Toggle**: Fixed a bug where YouTube end screen suggestions and overlay elements remained hidden after toggling the option off. Added style clearing to reset display overrides.
 - **YouTube Report History Sidebar Divider**: Fixed an issue where hiding "Report history" left an extra visual separator line above the guide footer. Now hides adjacent divider elements dynamically.
