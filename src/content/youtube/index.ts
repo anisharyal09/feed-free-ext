@@ -39,8 +39,8 @@ function manageMusicOverlay(state: FeedFreeState): void {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #000000;
-        z-index: 67;
+        background-color: transparent;
+        z-index: 2000;
         pointer-events: none;
         font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
         box-sizing: border-box;
@@ -120,7 +120,7 @@ function manageMusicOverlay(state: FeedFreeState): void {
         font-size: 11px;
         font-weight: 600;
         cursor: pointer;
-        z-index: 67;
+        z-index: 2000;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         opacity: 0;
         pointer-events: auto;
@@ -138,6 +138,14 @@ function manageMusicOverlay(state: FeedFreeState): void {
       }
       #ff-music-toggle-btn:active {
         transform: scale(0.95);
+      }
+      .ff-music-no-overlay .ytp-chrome-bottom,
+      .ff-music-no-overlay .ytp-chrome-top,
+      .ff-music-no-overlay .ytp-gradient-bottom,
+      .ff-music-no-overlay .ytp-gradient-top,
+      .ff-music-no-overlay .ytp-large-play-button,
+      .ff-music-no-overlay .ytp-bezel {
+        display: none !important;
       }
     `
     document.documentElement.appendChild(style)
@@ -158,7 +166,15 @@ function manageMusicOverlay(state: FeedFreeState): void {
   if (!isGlobalEnabled || !player) {
     existingOverlay?.remove()
     existingToggle?.remove()
+    player?.classList.remove('ff-music-no-overlay')
     return
+  }
+
+  // Manage no-overlay class for hiding native controls
+  if (isMusicOnly && !showOverlay) {
+    player.classList.add('ff-music-no-overlay')
+  } else {
+    player.classList.remove('ff-music-no-overlay')
   }
 
   // 1. Manage Music Overlay (Only if music mode is active AND showOverlay is true)
@@ -443,6 +459,8 @@ function teardownAll(): void {
   document.getElementById('ff-music-overlay')?.remove()
   document.getElementById('ff-music-toggle-btn')?.remove()
   document.getElementById('ff-music-ui-style')?.remove()
+  const player = document.getElementById('movie_player') || document.querySelector('.html5-video-player')
+  player?.classList.remove('ff-music-no-overlay')
   if (cleanupInterval !== null) {
     clearInterval(cleanupInterval)
     cleanupInterval = null
