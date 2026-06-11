@@ -18,7 +18,7 @@ function manageMusicOverlay(state: FeedFreeState): void {
   const isGlobalEnabled = state.globalEnabled
   const isMusicOnly = isGlobalEnabled && state.youtube.musicOnlyMode
   const showOverlay = isGlobalEnabled && state.youtube.musicOnlyShowOverlay
-  
+
   const player = document.getElementById('movie_player') || document.querySelector('.html5-video-player')
   const existingOverlay = document.getElementById('ff-music-overlay')
   const existingToggle = document.getElementById('ff-music-toggle-btn')
@@ -40,7 +40,7 @@ function manageMusicOverlay(state: FeedFreeState): void {
         align-items: center;
         justify-content: center;
         background-color: #000000;
-        z-index: 10;
+        z-index: 67;
         pointer-events: none;
         font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
         box-sizing: border-box;
@@ -120,7 +120,7 @@ function manageMusicOverlay(state: FeedFreeState): void {
         font-size: 11px;
         font-weight: 600;
         cursor: pointer;
-        z-index: 55;
+        z-index: 67;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         opacity: 0;
         pointer-events: auto;
@@ -243,7 +243,7 @@ function manageMusicOverlay(state: FeedFreeState): void {
         </svg>
         <span>${isMusicOnly ? 'Switch to Video' : 'Music Mode'}</span>
       `
-      
+
       toggleBtn.onclick = async (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -367,21 +367,21 @@ function querySelectorsAllShadow(selector: string, root: Document | ShadowRoot |
   const elements: Element[] = []
   try {
     elements.push(...Array.from(root.querySelectorAll(selector)))
-  } catch {}
-  
+  } catch { }
+
   const traverse = (node: Node) => {
     if (node instanceof HTMLElement) {
       const shadow = node.shadowRoot
       if (shadow) {
         try {
           elements.push(...Array.from(shadow.querySelectorAll(selector)))
-        } catch {}
+        } catch { }
         shadow.childNodes.forEach(traverse)
       }
     }
     node.childNodes.forEach(traverse)
   }
-  
+
   traverse(root)
   return elements
 }
@@ -497,7 +497,7 @@ function setupHeartbeat(): void {
       manageMusicOverlay(currentState)
       injectShadowStyles(currentState)
       hideYouTubeEndScreensJS()
-      
+
       const rules = getActiveRules(currentState)
       if (rules.length === 0) return
       log('Heartbeat — re-applying rules')

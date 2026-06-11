@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.2.2] - 2026-06-11
+
+### Changed
+- Tweaked z-index of YouTube visualizer overlay and floating toggle button.
+- Polished the "Hide Comments" option description in the Instagram popup.
+- Updated README **Get it on** badges to reflect live approved store version v1.2.1 (from v1.1.0)
+
+### Fixed
+- Fixed Instagram Hide Likes not functioning and Comments over functioning.
+
 ## [v1.2.1] - 2026-06-10
 
 ### Added

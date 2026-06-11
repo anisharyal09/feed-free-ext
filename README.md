@@ -3,14 +3,14 @@
 Take control of your social media feeds. Block algorithmic recommendations, Shorts, Reels, suggested content, comments, and more on YouTube and Instagram. Works seamlessly with SPA navigation — no page reload required.
 
 
-#### Try it on:
+#### Get it on:
 <p align="left">
   <a href="https://chromewebstore.google.com/detail/feed-free-unbiased-feed-f/fmmfdjmmjmkedafmhhdmoafbioakeefp">
-    <img src="https://img.shields.io/badge/CHROME%20WEB%20STORE-v1.1.0-blue?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome Web Store" />
+    <img src="https://img.shields.io/badge/CHROME%20WEB%20STORE-v1.2.1-4285F4?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome Web Store" />
   </a>
   <br>
   <a href="https://addons.mozilla.org/en-US/firefox/addon/feed-free-uf/">
-    <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-v1.1.0-blue?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" />
+    <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-v1.2.1-FF7139?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" />
   </a>
 </p>
 
@@ -60,10 +60,12 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 - **Grayscale Mode** — Turn Instagram completely black & white.
 
 ### Global
-- **Master toggle** — Enable/disable all blocking at once (Feed Free Active / Inactive)
-- **Real-time sync** — Changes apply across all open tabs instantly
-- **SPA-proof** — Works through client-side navigation without requiring a page reload
-- **Firefox + Chrome** — Supports both browsers from the same codebase
+- **Master toggle** — Enable/disable all blocking at once (Feed Free Active / Inactive).
+- **Real-time sync** — Changes apply across all open tabs instantly.
+- **SPA-proof** — Works through client-side navigation without requiring a page reload.
+- **Firefox + Chrome** — Supports both browsers from the same codebase.
+- **Grayscale Mode** — Apply a global high-contrast desaturation filter across both platforms to reduce visual dopamine triggers without shifting layouts.
+- **Core Engine Optimization** — Synchronous Anti-Flicker scripts ensure instant, zero-delay node filtering during Single-Page Application (SPA) transitions.
 
 ---
 

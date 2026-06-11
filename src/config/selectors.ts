@@ -846,13 +846,7 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
       value: 'none',
     },
     {
-      selector: '._ac7v.x1ty9z65.xzboxd6>div>a>div.x1ey2m1c>*, .x12nagc.x182iqb8.xv54qhq.xf7dkkf:has(.html-span.xdj266r.x14z9mp.xat24cr.x1lziwak.xexx8yu)',
-      fallbacks: [],
-      property: 'display',
-      value: 'none',
-    },
-    {
-      selector: '.html-div.xdj266r.x14z9mp.x1lziwak.xexx8yu.xyri2b.x18d9i69.x1c1uobl.x6s0dn4.x1ypdohk.x78zum5.xdt5ytf.xieb3on span.x1vvkbs, .html-div.xdj266r.x14z9mp.x1lziwak.xexx8yu.xyri2b.x18d9i69.x1c1uobl.x6s0dn4.x1ypdohk.x78zum5.xdt5ytf.xieb3on>div:nth-child(2)',
+      selector: '._ac7v.x1ty9z65.xzboxd6>div>a>div.x1ey2m1c>*:last-child',
       fallbacks: [],
       property: 'display',
       value: 'none',
@@ -903,6 +897,20 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
     },
     {
       selector: 'button.hide_ls2',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Post likes section (liked by and likes count)
+      selector: '.html-div.xdj266r.x14z9mp.x1lziwak.xexx8yu.xyri2b.x18d9i69.x1c1uobl.x6s0dn4.x1ypdohk.x78zum5.xdt5ytf.xieb3on span.x1vvkbs, .html-div.xdj266r.x14z9mp.x1lziwak.xexx8yu.xyri2b.x18d9i69.x1c1uobl.x6s0dn4.x1ypdohk.x78zum5.xdt5ytf.xieb3on>div:nth-child(2)',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Grid post hover likes count (alternative grid selector)
+      selector: '._ac7v.x1ty9z65.xzboxd6>div>a>div.x1ey2m1c>*:first-child, .x12nagc.x182iqb8.xv54qhq.xf7dkkf:has(.html-span.xdj266r.x14z9mp.xat24cr.x1lziwak.xexx8yu)',
       fallbacks: [],
       property: 'display',
       value: 'none',

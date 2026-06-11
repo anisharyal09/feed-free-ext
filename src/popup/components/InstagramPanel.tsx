@@ -155,7 +155,7 @@ export function InstagramPanel() {
       />
       <Row
         label="Hide Comments"
-        hint="Hide comments list, counts, and forms on posts and reels"
+        hint="Hide comment sections, comment buttons, and comment counts"
         checked={state.instagram.hideComments}
         disabled={disabled}
         activeColor={activeColor}
