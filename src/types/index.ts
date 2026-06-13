@@ -8,7 +8,12 @@ export interface YouTubeState {
   nukeSubscriptions: boolean
   nukeExplore: boolean
   nukeReportHistory: boolean
+  nukeNotifications: boolean
   nukeMoreFromYouTube: boolean
+  musicOnlyTogglePosition: {
+    x: number
+    y: number
+  }
   musicOnlyMode: boolean
   musicOnlyShowOverlay: boolean
   grayMode: boolean

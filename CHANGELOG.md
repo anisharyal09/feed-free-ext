@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.2.3] - 2026-06-12
+
+### Added
+- **YouTube Controls**:
+  - **Hide Notifications**: Added a new option to hide the notifications bell icon and activity links from the top bar and sidebar navigation.
+- **Dynamic Music Mode**: Made the "Music Mode" floating toggle button fully **draggable** anywhere within the YouTube video player UI! Its position is cleanly saved and remembered across sessions.
+
+### Fixed
+- **Music Toggle Z-Index**: Elevated the z-index of the music mode toggle button (`999999`) to ensure it stays clickable and isn't overridden by native video player controls (particularly the native 'info - **i**' button).
+- **Music Toggle UI Glitches**: Prevented the toggle button's text from wrapping to the next line when dragged to the right edge of the player.
+- **Accessibility Improvements**: Added dynamic `aria-label` attributes and keyboard `:focus-visible` outlines to the music mode UI buttons.
+
+### Changed
+- Patched version to `v1.2.3` across all manifests and documentation.
+
 ## [v1.2.2] - 2026-06-11
 
 ### Changed

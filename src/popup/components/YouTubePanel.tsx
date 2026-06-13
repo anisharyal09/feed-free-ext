@@ -99,6 +99,14 @@ export function YouTubePanel() {
         onChange={(v) => setYouTube({ nukeReportHistory: v })}
       />
       <Row
+        label="Hide Notifications"
+        hint="Remove Notifications entry without leaving sidebar gaps"
+        checked={state.youtube.nukeNotifications}
+        disabled={disabled}
+        activeColor={activeColor}
+        onChange={(v) => setYouTube({ nukeNotifications: v })}
+      />
+      <Row
         label="Hide More from YouTube"
         hint="Remove 'More from YouTube' section from sidebar"
         checked={state.youtube.nukeMoreFromYouTube}

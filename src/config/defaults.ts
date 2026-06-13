@@ -1,6 +1,6 @@
 import type { FeedFreeState, YouTubeState, InstagramState } from '../types'
 
-export const CURRENT_VERSION = '1.2.1'
+export const CURRENT_VERSION = '1.2.3'
 
 export const DEFAULT_YOUTUBE: YouTubeState = {
   nukeHomeFeed: false,
@@ -12,7 +12,12 @@ export const DEFAULT_YOUTUBE: YouTubeState = {
   nukeSubscriptions: false,
   nukeExplore: false,
   nukeReportHistory: false,
+  nukeNotifications: false,
   nukeMoreFromYouTube: false,
+  musicOnlyTogglePosition: {
+    x: 0.98,
+    y: 0.08,
+  },
   musicOnlyMode: false,
   musicOnlyShowOverlay: true,
   grayMode: false,

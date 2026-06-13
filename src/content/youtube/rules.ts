@@ -13,6 +13,7 @@ export type YouTubeRuleKey =
   | 'subscriptions'
   | 'explore'
   | 'reportHistory'
+  | 'notifications'
   | 'moreFromYouTube'
   | 'shortsProfiles'
 
@@ -33,6 +34,7 @@ const RULE_MAP: Record<YouTubeRuleKey, string> = {
   subscriptions: 'subscriptions',
   explore: 'explore',
   reportHistory: 'reportHistory',
+  notifications: 'notifications',
   moreFromYouTube: 'moreFromYouTube',
   shortsProfiles: 'shortsProfiles',
 }
@@ -100,6 +102,12 @@ export function getActiveRules(state: FeedFreeState): ActiveRule[] {
     rules.push({
       name: 'reportHistory',
       selectors: getSelectorEntries('youtube', RULE_MAP.reportHistory),
+    })
+  }
+  if (state.youtube.nukeNotifications) {
+    rules.push({
+      name: 'notifications',
+      selectors: getSelectorEntries('youtube', RULE_MAP.notifications),
     })
   }
   if (state.youtube.nukeMoreFromYouTube) {

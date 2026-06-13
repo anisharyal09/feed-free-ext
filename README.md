@@ -6,11 +6,11 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 #### Get it on:
 <p align="left">
   <a href="https://chromewebstore.google.com/detail/feed-free-unbiased-feed-f/fmmfdjmmjmkedafmhhdmoafbioakeefp">
-    <img src="https://img.shields.io/badge/CHROME%20WEB%20STORE-v1.2.1-4285F4?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome Web Store" />
+    <img src="https://img.shields.io/badge/CHROME%20WEB%20STORE-v1.2.3-4285F4?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome Web Store" />
   </a>
   <br>
   <a href="https://addons.mozilla.org/en-US/firefox/addon/feed-free-uf/">
-    <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-v1.2.1-FF7139?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" />
+    <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-v1.2.3-FF7139?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" />
   </a>
 </p>
 
@@ -38,8 +38,10 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 - **Hide Subscriptions** — Remove Subscriptions link from guide/sidebar.
 - **Hide Explore** — Remove Trending/Explore links from guide/sidebar.
 - **Hide Report History** — Remove Report History link from guide/sidebar.
+- **Hide Notifications** — Remove the notifications bell and activity links from the top bar and sidebar.
 - **Hide More from YouTube** — Remove the "More from YouTube" category block from the guide/sidebar.
 - **Dynamic Music Mode** — Black out the video player (keep audio playing) with a floating toggle button on the player UI to switch back-and-forth directly, plus an optional screen overlay.
+- **Dynamic Music Mode** — Black out the video player (keep audio playing) with a **draggable** floating toggle button on the player UI to switch back-and-forth directly, plus an optional screen visual overlay option.
 - **Grayscale Mode** — Turn YouTube completely black & white.
 
 ### Instagram

@@ -14,6 +14,222 @@ let currentState: FeedFreeState | null = null
 let initialized = false
 let pendingState: FeedFreeState | null = null
 let heartbeat: ReturnType<typeof setInterval> | null = null
+let musicToggleHiddenForSession = false
+
+const DEFAULT_MUSIC_TOGGLE_POSITION = {
+  x: 0.90,
+  y: 0.08,
+}
+
+const MUSIC_TOGGLE_EDGE_MARGIN = 12
+const MUSIC_TOGGLE_DRAG_THRESHOLD = 4
+const MUSIC_TOGGLE_SNAP_MS = 160
+
+type MusicToggleElement = HTMLButtonElement & {
+  __ffDragAttached?: boolean
+  __ffSuppressClick?: boolean
+  __ffIsDragging?: boolean
+}
+
+type MusicDragState = {
+  dragging: boolean
+  startPointerX: number
+  startPointerY: number
+  pointerId: number | null
+  frameId: number | null
+  latestLeft: number
+  latestTop: number
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value))
+}
+
+function getMusicToggleBounds(player: HTMLElement, button?: HTMLElement): {
+  minX: number
+  maxX: number
+  minY: number
+  maxY: number
+  width: number
+  height: number
+} {
+  const playerRect = player.getBoundingClientRect()
+  const buttonRect = button?.getBoundingClientRect()
+  const buttonWidth = buttonRect?.width || button?.offsetWidth || 124
+  const buttonHeight = buttonRect?.height || button?.offsetHeight || 32
+  const halfWidth = buttonWidth / 2
+  const halfHeight = buttonHeight / 2
+  const minX = MUSIC_TOGGLE_EDGE_MARGIN + halfWidth
+  const maxX = Math.max(minX, playerRect.width - MUSIC_TOGGLE_EDGE_MARGIN - halfWidth)
+  const minY = MUSIC_TOGGLE_EDGE_MARGIN + halfHeight
+  const maxY = Math.max(minY, playerRect.height - MUSIC_TOGGLE_EDGE_MARGIN - halfHeight)
+
+  return {
+    minX,
+    maxX,
+    minY,
+    maxY,
+    width: playerRect.width || 1,
+    height: playerRect.height || 1,
+  }
+}
+
+function getMusicTogglePosition(state: FeedFreeState): { x: number; y: number } {
+  const position = state.youtube.musicOnlyTogglePosition ?? DEFAULT_MUSIC_TOGGLE_POSITION
+  return {
+    x: clamp(position.x, 0.02, 0.98),
+    y: clamp(position.y, 0.02, 0.98),
+  }
+}
+
+async function saveMusicTogglePosition(x: number, y: number): Promise<void> {
+  try {
+    const s = await loadState()
+    s.youtube.musicOnlyTogglePosition = {
+      x: clamp(x, 0.02, 0.98),
+      y: clamp(y, 0.02, 0.98),
+    }
+    await saveState(s)
+  } catch (err) {
+    console.error('[FeedFree:YouTube] Failed to save musicOnlyTogglePosition:', err)
+  }
+}
+
+function applyMusicTogglePosition(button: HTMLElement, player: HTMLElement, state: FeedFreeState): void {
+  const { x, y } = getMusicTogglePosition(state)
+  const bounds = getMusicToggleBounds(player, button)
+  const left = bounds.minX + ((bounds.maxX - bounds.minX) * x)
+  const top = bounds.minY + ((bounds.maxY - bounds.minY) * y)
+
+  button.style.left = `${left}px`
+  button.style.top = `${top}px`
+  button.style.right = 'auto'
+  button.style.bottom = 'auto'
+  button.style.transform = 'translate(-50%, -50%)'
+}
+
+function attachMusicToggleDrag(
+  button: MusicToggleElement,
+  player: HTMLElement,
+): void {
+  if (button.__ffDragAttached) return
+
+  const dragState: MusicDragState = {
+    dragging: false,
+    startPointerX: 0,
+    startPointerY: 0,
+    pointerId: null,
+    frameId: null,
+    latestLeft: 0,
+    latestTop: 0,
+  }
+
+  const updateFromPointer = (event: PointerEvent) => {
+    const rect = player.getBoundingClientRect()
+    const bounds = getMusicToggleBounds(player, button)
+    dragState.latestLeft = clamp(event.clientX - rect.left, bounds.minX, bounds.maxX)
+    dragState.latestTop = clamp(event.clientY - rect.top, bounds.minY, bounds.maxY)
+
+    if (dragState.frameId !== null) return
+    dragState.frameId = window.requestAnimationFrame(() => {
+      dragState.frameId = null
+      button.style.left = `${dragState.latestLeft}px`
+      button.style.top = `${dragState.latestTop}px`
+    })
+  }
+
+  button.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0) return
+    dragState.dragging = false
+    dragState.pointerId = event.pointerId
+    dragState.startPointerX = event.clientX
+    dragState.startPointerY = event.clientY
+    const bounds = getMusicToggleBounds(player, button)
+    dragState.latestLeft = clamp(event.clientX - player.getBoundingClientRect().left, bounds.minX, bounds.maxX)
+    dragState.latestTop = clamp(event.clientY - player.getBoundingClientRect().top, bounds.minY, bounds.maxY)
+    button.__ffIsDragging = true
+    button.classList.add('ff-dragging')
+    button.style.transition = 'none'
+    button.setPointerCapture(event.pointerId)
+  })
+
+  button.addEventListener('pointermove', (event) => {
+    if (dragState.pointerId !== event.pointerId) return
+    const deltaX = Math.abs(event.clientX - dragState.startPointerX)
+    const deltaY = Math.abs(event.clientY - dragState.startPointerY)
+    if (!dragState.dragging && (deltaX > MUSIC_TOGGLE_DRAG_THRESHOLD || deltaY > MUSIC_TOGGLE_DRAG_THRESHOLD)) {
+      dragState.dragging = true
+      button.style.cursor = 'grabbing'
+    }
+    if (!dragState.dragging) return
+    event.preventDefault()
+    updateFromPointer(event)
+  })
+
+  button.addEventListener('pointerup', async (event) => {
+    if (dragState.pointerId !== event.pointerId) return
+    const bounds = getMusicToggleBounds(player, button)
+    const leftPx = Number.parseFloat(button.style.left || `${dragState.latestLeft}`)
+    const topPx = Number.parseFloat(button.style.top || `${dragState.latestTop}`)
+    const clampedLeft = clamp(leftPx, bounds.minX, bounds.maxX)
+    const clampedTop = clamp(topPx, bounds.minY, bounds.maxY)
+    const nextX = clamp((clampedLeft - bounds.minX) / (bounds.maxX - bounds.minX || 1), 0, 1)
+    const nextY = clamp((clampedTop - bounds.minY) / (bounds.maxY - bounds.minY || 1), 0, 1)
+
+    if (dragState.dragging) {
+      button.__ffSuppressClick = true
+      button.style.transition = `left ${MUSIC_TOGGLE_SNAP_MS}ms ease-out, top ${MUSIC_TOGGLE_SNAP_MS}ms ease-out, transform ${MUSIC_TOGGLE_SNAP_MS}ms ease-out`
+      button.style.left = `${clampedLeft}px`
+      button.style.top = `${clampedTop}px`
+      await saveMusicTogglePosition(nextX, nextY)
+    }
+
+    dragState.dragging = false
+    dragState.pointerId = null
+    button.__ffIsDragging = false
+    if (dragState.frameId !== null) {
+      window.cancelAnimationFrame(dragState.frameId)
+      dragState.frameId = null
+    }
+    button.classList.remove('ff-dragging')
+    window.setTimeout(() => {
+      if (!button.classList.contains('ff-dragging')) {
+        button.style.transition = ''
+      }
+    }, MUSIC_TOGGLE_SNAP_MS)
+    button.style.cursor = 'pointer'
+    try {
+      button.releasePointerCapture(event.pointerId)
+    } catch { }
+  })
+
+  button.addEventListener('pointercancel', (event) => {
+    if (dragState.pointerId !== event.pointerId) return
+    dragState.dragging = false
+    dragState.pointerId = null
+    button.__ffIsDragging = false
+    if (dragState.frameId !== null) {
+      window.cancelAnimationFrame(dragState.frameId)
+      dragState.frameId = null
+    }
+    button.classList.remove('ff-dragging')
+    button.style.transition = ''
+    button.style.cursor = 'pointer'
+    try {
+      button.releasePointerCapture(event.pointerId)
+    } catch { }
+  })
+
+  button.addEventListener('click', (event) => {
+    if (!button.__ffSuppressClick) return
+    button.__ffSuppressClick = false
+    event.preventDefault()
+    event.stopPropagation()
+  }, true)
+
+  button.__ffDragAttached = true
+}
+
 function manageMusicOverlay(state: FeedFreeState): void {
   const isGlobalEnabled = state.globalEnabled
   const isMusicOnly = isGlobalEnabled && state.youtube.musicOnlyMode
@@ -104,10 +320,15 @@ function manageMusicOverlay(state: FeedFreeState): void {
       .ff-music-btn:active {
         transform: translateY(0);
       }
+      .ff-music-btn:focus-visible,
+      #ff-music-toggle-btn:focus-visible {
+        outline: 2px solid rgba(16, 185, 129, 0.8);
+        outline-offset: 2px;
+      }
       #ff-music-toggle-btn {
         position: absolute;
-        top: 12px;
-        right: 12px;
+        top: 0;
+        left: 0;
         display: flex;
         align-items: center;
         gap: 6px;
@@ -120,11 +341,15 @@ function manageMusicOverlay(state: FeedFreeState): void {
         font-size: 11px;
         font-weight: 600;
         cursor: pointer;
-        z-index: 2000;
+        z-index: 999999;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         opacity: 0;
         pointer-events: auto;
+        user-select: none;
+        touch-action: none;
+        will-change: left, top, transform;
         font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
+        white-space: nowrap;
       }
       #movie_player:hover #ff-music-toggle-btn,
       .html5-video-player:hover #ff-music-toggle-btn {
@@ -146,6 +371,12 @@ function manageMusicOverlay(state: FeedFreeState): void {
       .ff-music-no-overlay .ytp-large-play-button,
       .ff-music-no-overlay .ytp-bezel {
         display: none !important;
+      }
+      #ff-music-toggle-btn.ff-dragging {
+        cursor: grabbing;
+        transition: none;
+        opacity: 1 !important;
+        transform: translate(-50%, -50%) scale(1.02);
       }
     `
     document.documentElement.appendChild(style)
@@ -248,9 +479,17 @@ function manageMusicOverlay(state: FeedFreeState): void {
   const shouldShowToggle = !isMusicOnly || (isMusicOnly && !showOverlay)
 
   if (shouldShowToggle) {
+    if (musicToggleHiddenForSession) {
+      existingToggle?.remove()
+      return
+    }
+
     if (!existingToggle) {
       const toggleBtn = document.createElement('button')
+      const musicToggleButton = toggleBtn as MusicToggleElement
       toggleBtn.id = 'ff-music-toggle-btn'
+      toggleBtn.title = 'Drag to move. Alt+click hides this button until refresh.'
+      toggleBtn.setAttribute('aria-label', isMusicOnly ? 'Switch to Video' : 'Enable Music Mode')
       toggleBtn.innerHTML = `
         <svg class="ff-music-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px; margin-right: 2px;">
           <path d="M9 18V5l12-2v13"></path>
@@ -260,7 +499,23 @@ function manageMusicOverlay(state: FeedFreeState): void {
         <span>${isMusicOnly ? 'Switch to Video' : 'Music Mode'}</span>
       `
 
+      player.appendChild(toggleBtn)
+      applyMusicTogglePosition(musicToggleButton, player, state)
+      attachMusicToggleDrag(musicToggleButton, player)
+
       toggleBtn.onclick = async (e) => {
+        if (e.altKey) {
+          e.preventDefault()
+          e.stopPropagation()
+          musicToggleHiddenForSession = true
+          toggleBtn.remove()
+          return
+        }
+
+        if (musicToggleButton.__ffSuppressClick) {
+          musicToggleButton.__ffSuppressClick = false
+          return
+        }
         e.preventDefault()
         e.stopPropagation()
         try {
@@ -271,15 +526,17 @@ function manageMusicOverlay(state: FeedFreeState): void {
           console.error('[FeedFree:YouTube] Failed to toggle musicOnlyMode:', err)
         }
       }
-
-      player.appendChild(toggleBtn)
     } else {
       if (existingToggle.parentNode !== player) {
         player.appendChild(existingToggle)
       }
-      const span = existingToggle.querySelector('span')
-      if (span) {
-        span.textContent = isMusicOnly ? 'Switch to Video' : 'Music Mode'
+      if (!(existingToggle as MusicToggleElement).__ffIsDragging) {
+        applyMusicTogglePosition(existingToggle as HTMLElement, player, state)
+        const span = existingToggle.querySelector('span')
+        if (span) {
+          span.textContent = isMusicOnly ? 'Switch to Video' : 'Music Mode'
+          existingToggle.setAttribute('aria-label', isMusicOnly ? 'Switch to Video' : 'Enable Music Mode')
+        }
       }
     }
   } else {

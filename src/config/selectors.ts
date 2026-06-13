@@ -310,6 +310,24 @@ export const YOUTUBE: Record<string, SelectorRule | SelectorRule[]> = {
     property: 'display',
     value: 'none',
   },
+  notifications: {
+    selector: 'ytd-notification-topbar-button-renderer, ytd-masthead ytd-notification-topbar-button-renderer, ytd-notification-topbar-button-renderer button[aria-label="Notifications"], ytd-guide-section-renderer:has(a[href^="/notifications"]), ytd-guide-entry-renderer:has(a[href^="/notifications"]), ytd-mini-guide-entry-renderer:has(a[href^="/notifications"]), ytd-guide-section-renderer:has(a[href^="/notifications"]) + ytd-guide-divider-renderer, ytd-guide-section-renderer:has(a[href^="/notifications"]) + tp-yt-paper-divider, ytd-guide-divider-renderer:has(+ ytd-guide-section-renderer:has(a[href^="/notifications"])), tp-yt-paper-divider:has(+ ytd-guide-section-renderer:has(a[href^="/notifications"]))',
+    fallbacks: [
+      'ytd-notification-topbar-button-renderer',
+      'ytd-masthead ytd-notification-topbar-button-renderer',
+      'ytd-notification-topbar-button-renderer button[aria-label="Notifications"]',
+      'a[href^="/notifications"]',
+      'a[href="/notifications/"]',
+      'a:has(svg[aria-label="Notifications"])',
+      'a:has(svg[aria-label="Activity"])',
+      'a:has(svg[aria-label="Heart"])',
+      'div[role="button"]:has(svg[aria-label="Notifications"])',
+      'div[role="button"]:has(svg[aria-label="Activity"])',
+      'div[role="button"]:has(svg[aria-label="Heart"])',
+    ],
+    property: 'display',
+    value: 'none',
+  },
   comments: [
     {
       selector: '#comments',
