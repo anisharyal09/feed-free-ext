@@ -4,13 +4,13 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 
 
 #### Get it on:
-<p align="left">
-  <a href="https://chromewebstore.google.com/detail/feed-free-unbiased-feed-f/fmmfdjmmjmkedafmhhdmoafbioakeefp">
-    <img src="https://img.shields.io/badge/CHROME%20WEB%20STORE-v1.2.1-4285F4?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome Web Store" />
-  </a>
-  <br>
+<p align="center">
   <a href="https://addons.mozilla.org/en-US/firefox/addon/feed-free-uf/">
-    <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-v1.2.1-FF7139?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" />
+    <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-v1.2.1-FF7139?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" height="23" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://chromewebstore.google.com/detail/feed-free-unbiased-feed-f/fmmfdjmmjmkedafmhhdmoafbioakeefp">
+    <img src="https://img.shields.io/badge/CHROME%20WEB%20STORE-v1.2.1-4285F4?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome Web Store" height="23" />
   </a>
 </p>
 

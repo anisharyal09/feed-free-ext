@@ -214,11 +214,11 @@ export default function PopupApp() {
           </svg>
         </a>
         <a
-          href="https://ko-fi.com/anisharyal09"
+          href="https://anisharyal09.com.np/support?from=feed-free"
           target="_blank"
           rel="noopener noreferrer"
           className="tooltip flex items-center text-slate-500 hover:text-[#FF5E5B] transition-colors duration-150 active:scale-95"
-          data-tooltip="Support me on Ko-fi!"
+          data-tooltip="Support me!"
         >
           <svg
             className="w-3.5 h-3.5"
@@ -238,7 +238,7 @@ export default function PopupApp() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
           </svg>
         </a>
-        <div className="shrink-0">v1.2.3</div>
+        <div className="shrink-0">v1.2.4</div>
       </footer>
     </div>
   )

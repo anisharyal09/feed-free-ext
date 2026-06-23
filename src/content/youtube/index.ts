@@ -544,47 +544,45 @@ function manageMusicOverlay(state: FeedFreeState): void {
   }
 }
 
-const shadowObservers = new WeakMap<ShadowRoot, MutationObserver>()
-
 function injectShadowStyles(state: FeedFreeState): void {
+  if (!state.globalEnabled) return
+
   try {
     const cssLines: string[] = []
 
-    if (state.globalEnabled) {
-      if (state.youtube.nukeEndScreens) {
-        cssLines.push(`
-          .ytp-ce-element,
-          .ytp-ce-element-show,
-          .ytp-endscreen,
-          .html5-endscreen,
-          .ytp-endscreen-content,
-          .ytp-upnext,
-          .ytp-upnext-autoplay-icon,
-          .ytp-ce-covering-overlay,
-          .ytp-ce-covering-image,
-          .ytp-videowall-still,
-          .ytp-modern-videowall-still,
-          .ytp-suggestion-set,
-          .ytp-fullscreen-grid-main-content,
-          .ytp-fullscreen-grid-stills-container {
-            display: none !important;
-          }
-        `)
-      }
+    if (state.youtube.nukeEndScreens) {
+      cssLines.push(`
+        .ytp-ce-element,
+        .ytp-ce-element-show,
+        .ytp-endscreen,
+        .html5-endscreen,
+        .ytp-endscreen-content,
+        .ytp-upnext,
+        .ytp-upnext-autoplay-icon,
+        .ytp-ce-covering-overlay,
+        .ytp-ce-covering-image,
+        .ytp-videowall-still,
+        .ytp-modern-videowall-still,
+        .ytp-suggestion-set,
+        .ytp-fullscreen-grid-main-content,
+        .ytp-fullscreen-grid-stills-container {
+          display: none !important;
+        }
+      `)
+    }
 
-      if (state.youtube.musicOnlyMode) {
-        cssLines.push(`
-          video {
-            opacity: 0 !important;
-          }
-          .html5-video-container {
-            background: #000 !important;
-          }
-          #movie_player {
-            background-color: #000 !important;
-          }
-        `)
-      }
+    if (state.youtube.musicOnlyMode) {
+      cssLines.push(`
+        video {
+          opacity: 0 !important;
+        }
+        .html5-video-container {
+          background: #000 !important;
+        }
+        #movie_player {
+          background-color: #000 !important;
+        }
+      `)
     }
 
     const css = cssLines.join('\n')
@@ -606,29 +604,27 @@ function injectShadowStyles(state: FeedFreeState): void {
       }
     }
 
-    const findAndInject = (node: Node) => {
-      if (node instanceof HTMLElement) {
-        const shadow = node.shadowRoot
-        if (shadow) {
-          ensureStyleInShadow(shadow)
-
-          if (!shadowObservers.has(shadow)) {
-            const observer = new MutationObserver(() => {
-              if (currentState) {
-                ensureStyleInShadow(shadow)
-              }
-            })
-            observer.observe(shadow, { childList: true, subtree: true })
-            shadowObservers.set(shadow, observer)
+    const shadowRoots: ShadowRoot[] = []
+    const traverse = (current: Document | ShadowRoot) => {
+      try {
+        const elements = current.querySelectorAll('*')
+        for (let i = 0; i < elements.length; i++) {
+          const el = elements[i]
+          if (el.shadowRoot) {
+            shadowRoots.push(el.shadowRoot)
+            traverse(el.shadowRoot)
           }
-
-          shadow.childNodes.forEach(findAndInject)
         }
+      } catch (e) {
+        err('Error querying shadow roots:', e)
       }
-      node.childNodes.forEach(findAndInject)
     }
 
-    findAndInject(document.documentElement)
+    traverse(document)
+
+    shadowRoots.forEach((shadow) => {
+      ensureStyleInShadow(shadow)
+    })
   } catch (e) {
     err('injectShadowStyles failed:', e)
   }
@@ -636,32 +632,9 @@ function injectShadowStyles(state: FeedFreeState): void {
 
 let cleanupInterval: ReturnType<typeof setInterval> | null = null
 
-function querySelectorsAllShadow(selector: string, root: Document | ShadowRoot | Element = document): Element[] {
-  const elements: Element[] = []
-  try {
-    elements.push(...Array.from(root.querySelectorAll(selector)))
-  } catch { }
-
-  const traverse = (node: Node) => {
-    if (node instanceof HTMLElement) {
-      const shadow = node.shadowRoot
-      if (shadow) {
-        try {
-          elements.push(...Array.from(shadow.querySelectorAll(selector)))
-        } catch { }
-        shadow.childNodes.forEach(traverse)
-      }
-    }
-    node.childNodes.forEach(traverse)
-  }
-
-  traverse(root)
-  return elements
-}
-
 function restoreYouTubeEndScreensJS(): void {
   try {
-    const elements = querySelectorsAllShadow(END_SCREEN_SELECTORS)
+    const elements = document.querySelectorAll(END_SCREEN_SELECTORS)
     elements.forEach((el) => {
       const htmlEl = el as HTMLElement
       if (htmlEl.style.display === 'none') {
@@ -680,7 +653,7 @@ function hideYouTubeEndScreensJS(): void {
   }
 
   try {
-    const elements = querySelectorsAllShadow(END_SCREEN_SELECTORS)
+    const elements = document.querySelectorAll(END_SCREEN_SELECTORS)
     elements.forEach((el) => {
       const htmlEl = el as HTMLElement
       if (htmlEl.style.display !== 'none') {
@@ -694,17 +667,21 @@ function hideYouTubeEndScreensJS(): void {
 
 function applyRules(state: FeedFreeState): void {
   currentState = state
+  if (!state.globalEnabled) return
+
   const rules = getActiveRules(state)
   log('applyRules — globalEnabled:', state.globalEnabled, 'activeRules:', rules.map(r => r.name))
   try {
-    updateStyles(rules)
+    const stylesChanged = updateStyles(rules)
     removeAntiflicker()
     manageMusicOverlay(state)
     injectShadowStyles(state)
     hideYouTubeEndScreensJS()
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'))
-    }, 100)
+    if (stylesChanged) {
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'))
+      }, 100)
+    }
   } catch (e) {
     err('applyRules failed:', e)
   }
@@ -723,21 +700,22 @@ function teardownAll(): void {
     cleanupInterval = null
   }
   try {
-    const removeShadowStyles = (node: Node) => {
-      if (node instanceof HTMLElement) {
-        const shadow = node.shadowRoot
-        if (shadow) {
-          shadow.getElementById('ff-shadow-styles')?.remove()
-          const obs = shadowObservers.get(shadow)
-          if (obs) {
-            obs.disconnect()
-          }
-          shadow.childNodes.forEach(removeShadowStyles)
+    const shadowRoots: ShadowRoot[] = []
+    const traverse = (current: Document | ShadowRoot) => {
+      const elements = current.querySelectorAll('*')
+      for (let i = 0; i < elements.length; i++) {
+        const el = elements[i]
+        if (el.shadowRoot) {
+          shadowRoots.push(el.shadowRoot)
+          traverse(el.shadowRoot)
         }
       }
-      node.childNodes.forEach(removeShadowStyles)
     }
-    removeShadowStyles(document.documentElement)
+    traverse(document)
+
+    shadowRoots.forEach((shadow) => {
+      shadow.getElementById('ff-shadow-styles')?.remove()
+    })
   } catch (e) {
     err('Failed to clean shadow styles:', e)
   }

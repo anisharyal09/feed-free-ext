@@ -7,12 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [v1.2.3] - 2026-06-12
+## [v1.2.4] - 2026-06-24
+
+### Fixed
+- **YouTube Performance**: Fixed Shorts scrolling lag and hover playback loops by optimizing MutationObservers and DOM queries.
+- **Instagram Comments**: Kept the comment button/icon visible for visual layout balance while hiding comment lists, textareas, and counts.
+- **Instagram Likes Separation**: Separated post likes counts from comments-hiding logic using precise parent-container qualifiers to prevent feature overlap.
+- **Store Badges**: Aligned and centered badges side-by-side in README.md.
+
+### Changed
+- Patched version to `v1.2.4` across all manifests and documentation.
+
+
+## [v1.2.3] - 2026-06-13
 
 ### Added
 - **YouTube Controls**:
   - **Hide Notifications**: Added a new option to hide the notifications bell icon and activity links from the top bar and sidebar navigation.
-- **Dynamic Music Mode**: Made the "Music Mode" floating toggle button fully **draggable** anywhere within the YouTube video player UI! Its position is cleanly saved and remembered across sessions.
+  - **Dynamic Music Mode**: Made the "Music Mode" floating toggle button fully **draggable** anywhere within the YouTube video player UI! Its position is cleanly saved and remembered across sessions.
 
 ### Fixed
 - **Music Toggle Z-Index**: Elevated the z-index of the music mode toggle button (`999999`) to ensure it stays clickable and isn't overridden by native video player controls (particularly the native 'info - **i**' button).

@@ -15,7 +15,7 @@ function expandRule(rule: SelectorRule): string[] {
 
 export function updateStyles(
   rules: Array<{ name: string; selectors: SelectorRule[] }>,
-): void {
+): boolean {
   const css: string[] = []
   for (const { selectors } of rules) {
     for (const rule of selectors) {
@@ -26,19 +26,30 @@ export function updateStyles(
   const existingStyle = document.getElementById(STYLE_ID) as HTMLStyleElement | null
 
   if (css.length === 0) {
-    existingStyle?.remove()
-    return
+    if (existingStyle) {
+      existingStyle.remove()
+      return true
+    }
+    return false
   }
 
   const joined = css.join('\n')
 
   let styleEl = existingStyle ?? document.createElement('style')
   styleEl.id = STYLE_ID
-  styleEl.textContent = joined
+  
+  let modified = false
+  if (styleEl.textContent !== joined) {
+    styleEl.textContent = joined
+    modified = true
+  }
   
   if (!styleEl.parentNode) {
     document.documentElement.appendChild(styleEl)
+    modified = true
   }
+
+  return modified
 }
 
 export function unmountAll(): void {

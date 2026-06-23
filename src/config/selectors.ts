@@ -765,12 +765,7 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
     },
   ],
   comments: [
-    {
-      selector: 'section > div:has(> span > svg[aria-label="Comment"]), a:has(> svg[aria-label="Comment"]), button:has(> svg[aria-label="Comment"]), svg[aria-label="Comment"]',
-      fallbacks: [],
-      property: 'display',
-      value: 'none',
-    },
+
     {
       selector: 'a[href*="/comments/"], a[href$="/comments/"], a[href$="/comments"], div:has(> a[href*="/comments/"])',
       fallbacks: [],
@@ -789,37 +784,16 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
       property: 'display',
       value: 'none',
     },
-    {
-      selector: '.x1qhh985.xm0m39n.x9f619.xe8uvvx[role="button"][tabindex="0"]:has(div>svg>path[d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"])',
-      fallbacks: [],
-      property: 'display',
-      value: 'none',
-    },
-    {
-      selector: '[aria-haspopup="menu"]:has(svg>path[d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"])',
-      fallbacks: [],
-      property: 'display',
-      value: 'none',
-    },
+
     // Reference selectors from igplus
-    {
-      selector: 'section>.x78zum5>.xp7jhwk+span:nth-child(2)',
-      fallbacks: [],
-      property: 'display',
-      value: 'none',
-    },
+
     {
       selector: 'hr+.x5yr21d.xw2csxc.x1odjw0f.x1n2onr6',
       fallbacks: [],
       property: 'display',
       value: 'none',
     },
-    {
-      selector: '.x78zum5.x1q0g3np.xwib8y2.x1yrsyyn.x1xp8e9x.x13fuv20.x178xt8z.xdj266r.x11i5rnm.xat24cr.x1mh8g0r.xo1ph6p.x1pi30zi.x1swvt13 > span:nth-child(2):has(svg)',
-      fallbacks: [],
-      property: 'display',
-      value: 'none',
-    },
+
     {
       selector: 'article .x9f619.xjbqb8w.x78zum5.x168nmei.x13lgxp2.x5pf9jr.xo71vjh.x1uhb9sk.x1plvlek.xryxfnj.x1c4vz4f.x2lah0s.xdt5ytf.xqjyukv.x1qjc9v5.x1oa3qoh.x1nhvcw1:has(h3._a9zc)',
       fallbacks: [],
@@ -858,7 +832,14 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
       value: 'none',
     },
     {
-      selector: '.x6s0dn4.xrvj5dj.x19g8pj0.x1dh5ka.xyamay9.x1l90r2v.x1mu97ne, .x6s0dn4.xrvj5dj.x1o61qjw.x12nagc.x1gslohp .x1ypdohk.x1s688f.x2fvf9.xe9ewy2',
+      selector: '.x6s0dn4.xrvj5dj.x19g8pj0.x1dh5ka.xyamay9.x1l90r2v.x1mu97ne',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Post comments counts in feed/Reels
+      selector: '.x6s0dn4.xrvj5dj.x1o61qjw.x12nagc.x1gslohp:has(svg[aria-label="Comment"], [aria-label="Comment"]) .x1ypdohk.x1s688f.x2fvf9.xe9ewy2',
       fallbacks: [],
       property: 'display',
       value: 'none',
@@ -929,6 +910,13 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
     {
       // Grid post hover likes count (alternative grid selector)
       selector: '._ac7v.x1ty9z65.xzboxd6>div>a>div.x1ey2m1c>*:first-child, .x12nagc.x182iqb8.xv54qhq.xf7dkkf:has(.html-span.xdj266r.x14z9mp.xat24cr.x1lziwak.xexx8yu)',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Post likes counts in feed
+      selector: '.x6s0dn4.xrvj5dj.x1o61qjw.x12nagc.x1gslohp:not(:has(svg[aria-label="Comment"], [aria-label="Comment"])) .x1ypdohk.x1s688f.x2fvf9.xe9ewy2',
       fallbacks: [],
       property: 'display',
       value: 'none',

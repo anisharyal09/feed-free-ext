@@ -146,6 +146,145 @@ function handleRedirect(state: FeedFreeState): boolean {
 
 let cleanupInterval: ReturnType<typeof setInterval> | null = null
 
+function findActionSection(article: HTMLElement): HTMLElement | null {
+  const svgs = article.querySelectorAll('svg')
+  for (const svg of svgs) {
+    const label = (svg.getAttribute('aria-label') || svg.parentElement?.getAttribute('aria-label') || '').toLowerCase()
+    let isActionIcon = false
+    
+    if (
+      label.includes('like') ||
+      label.includes('comment') ||
+      label.includes('share') ||
+      label.includes('save') ||
+      label.includes('unlike')
+    ) {
+      isActionIcon = true
+    } else {
+      const paths = svg.querySelectorAll('path')
+      for (const p of paths) {
+        const d = p.getAttribute('d') || ''
+        if (d.includes('16.792') || d.includes('20.656')) {
+          isActionIcon = true
+          break
+        }
+      }
+    }
+    
+    if (isActionIcon) {
+      const parentSection = svg.closest('section')
+      if (parentSection && article.contains(parentSection)) {
+        return parentSection
+      }
+      
+      let curr: HTMLElement | null = svg.parentElement
+      let bestCandidate: HTMLElement | null = null
+      while (curr && curr !== article) {
+        if (curr.querySelectorAll('svg').length >= 3) {
+          if (!curr.querySelector('form, textarea, input, ul')) {
+            bestCandidate = curr
+          }
+        }
+        curr = curr.parentElement
+      }
+      if (bestCandidate) return bestCandidate
+    }
+  }
+  
+  const sections = article.querySelectorAll('section')
+  for (const sec of sections) {
+    if (sec.querySelectorAll('svg').length > 0) {
+      return sec as HTMLElement
+    }
+  }
+  
+  return null
+}
+
+function getLikesElementsForArticle(article: HTMLElement, authorUsername: string | null): HTMLElement[] {
+  const likesEls: HTMLElement[] = []
+  const actionSection = findActionSection(article)
+  if (!actionSection) return likesEls
+
+  const isCaptionEl = (el: HTMLElement): boolean => {
+    if (!authorUsername) return false
+    const links = el.querySelectorAll('a')
+    for (const link of links) {
+      const href = link.getAttribute('href')
+      if (href) {
+        const username = href.replace(/^\/|\/$/g, '').split('?')[0]
+        if (username === authorUsername) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  const next = actionSection.nextElementSibling as HTMLElement | null
+  if (next) {
+    if (isCaptionEl(next) && next.children.length > 0) {
+      let child = next.firstElementChild as HTMLElement | null
+      while (child) {
+        if (child.querySelector('form, textarea, input')) {
+          break
+        }
+        if (isCaptionEl(child)) {
+          break
+        }
+        
+        likesEls.push(child)
+        child = child.nextElementSibling as HTMLElement | null
+      }
+    } else {
+      let sibling: HTMLElement | null = next
+      while (sibling) {
+        if (sibling.querySelector('form, textarea, input')) {
+          break
+        }
+        if (isCaptionEl(sibling)) {
+          break
+        }
+        
+        likesEls.push(sibling)
+        sibling = sibling.nextElementSibling as HTMLElement | null
+      }
+    }
+  }
+
+  const likesLink = article.querySelector('a[href*="/liked_by/"], a[href*="/likers/"]')
+  if (likesLink) {
+    let curr = likesLink.parentElement
+    while (curr && curr !== article) {
+      const parent = curr.parentElement
+      if (parent === article || (parent && parent === actionSection.nextElementSibling)) {
+        if (!likesEls.includes(curr)) {
+          likesEls.push(curr)
+        }
+        break
+      }
+      curr = parent
+    }
+  }
+
+  return likesEls
+}
+
+function isLikesElement(el: HTMLElement, article: HTMLElement, authorUsername: string | null): boolean {
+  if (el.hasAttribute('data-ff-likes-hidden') || el.closest('[data-ff-likes-hidden]')) {
+    return true
+  }
+  
+  const likesEls = getLikesElementsForArticle(article, authorUsername)
+  for (const likesEl of likesEls) {
+    if (el === likesEl || likesEl.contains(el)) {
+      return true
+    }
+  }
+  
+  return false
+}
+
 function restoreInstagramCommentsJS(): void {
   try {
     const hidden = document.querySelectorAll('[data-ff-comment-hidden]')
@@ -159,6 +298,187 @@ function restoreInstagramCommentsJS(): void {
   }
 }
 
+function restoreInstagramLikesJS(): void {
+  try {
+    const hidden = document.querySelectorAll('[data-ff-likes-hidden]')
+    hidden.forEach((el) => {
+      const htmlEl = el as HTMLElement
+      htmlEl.removeAttribute('data-ff-likes-hidden')
+      htmlEl.style.removeProperty('display')
+    })
+  } catch (e) {
+    err('restoreInstagramLikesJS failed:', e)
+  }
+}
+
+function hideInstagramLikesJS(): void {
+  if (!currentState?.globalEnabled || !currentState?.instagram.hideLikes) {
+    restoreInstagramLikesJS()
+    return
+  }
+
+  try {
+    // 1. Articles (posts in feed/dialogs)
+    const articles = document.querySelectorAll('article')
+    articles.forEach((article) => {
+      let authorUsername: string | null = null
+      const headerLinks = article.querySelectorAll('header a, header span a')
+      for (const link of headerLinks) {
+        const href = link.getAttribute('href')
+        if (href && isProfilePath(href)) {
+          authorUsername = href.replace(/^\/|\/$/g, '').split('?')[0]
+          break
+        }
+      }
+
+      if (!authorUsername) {
+        const allLinks = article.querySelectorAll('a')
+        for (const link of allLinks) {
+          const href = link.getAttribute('href')
+          if (href && isProfilePath(href)) {
+            authorUsername = href.replace(/^\/|\/$/g, '').split('?')[0]
+            break
+          }
+        }
+      }
+
+      // Check all section elements inside the article
+      const sections = article.querySelectorAll('section')
+      sections.forEach((sec) => {
+        if (sec.querySelector('form, textarea, input')) return
+        if (sec.querySelector('svg[aria-label="Like"], svg[aria-label="Unlike"], svg[aria-label="Comment"], svg[aria-label="Share"]')) return
+        
+        const text = sec.textContent || ''
+        if (
+          text.includes('like') ||
+          text.includes('likes') ||
+          text.includes('Liked by') ||
+          text.includes('views') ||
+          text.includes('view') ||
+          /^\d+[\d,\.]*\s+(likes|views|like|view)/i.test(text.trim())
+        ) {
+          sec.setAttribute('data-ff-likes-hidden', 'true')
+          sec.style.setProperty('display', 'none', 'important')
+        }
+      })
+
+      // Hide all identified likes elements
+      const likesEls = getLikesElementsForArticle(article, authorUsername)
+      likesEls.forEach((el) => {
+        el.setAttribute('data-ff-likes-hidden', 'true')
+        el.style.setProperty('display', 'none', 'important')
+      })
+    })
+
+    // 2. Reels and other icons Likes Hiding Fallback (covers Reels page & sidebar action items)
+    const allSvgs = document.querySelectorAll('svg')
+    
+    // Fallback A: Match by heart icon paths or labels
+    allSvgs.forEach((svg) => {
+      const label = (svg.getAttribute('aria-label') || svg.parentElement?.getAttribute('aria-label') || '').toLowerCase()
+      let isHeart = label === 'like' || label === 'unlike'
+      
+      if (!isHeart) {
+        const paths = svg.querySelectorAll('path')
+        for (const p of paths) {
+          const d = p.getAttribute('d') || ''
+          if (d.includes('16.792') || d.includes('12.002') || d.includes('12 21.35')) {
+            isHeart = true
+            break
+          }
+        }
+      }
+      
+      if (isHeart) {
+        const button = svg.closest('button') || svg.closest('[role="button"]')
+        if (button) {
+          const children = button.querySelectorAll('span, div')
+          children.forEach((child) => {
+            if (!child.querySelector('svg')) {
+              const text = (child.textContent || '').trim()
+              if (/^\d+[\d,\.\sKkMm]*$/.test(text) && text.length < 10) {
+                child.setAttribute('data-ff-likes-hidden', 'true');
+                (child as HTMLElement).style.setProperty('display', 'none', 'important')
+              }
+            }
+          })
+          
+          let current: HTMLElement | null = button
+          for (let depth = 0; depth < 2; depth++) {
+            if (!current) break
+            const parent = current.parentElement
+            if (parent) {
+              const siblings = Array.from(parent.children)
+              siblings.forEach((sib) => {
+                if (sib !== current && !sib.querySelector('svg') && !sib.querySelector('button, [role="button"]')) {
+                  const text = (sib.textContent || '').trim()
+                  if (/^\d+[\d,\.\sKkMm]*$/.test(text) && text.length < 10) {
+                    sib.setAttribute('data-ff-likes-hidden', 'true');
+                    (sib as HTMLElement).style.setProperty('display', 'none', 'important')
+                  }
+                }
+              })
+            }
+            current = current.parentElement
+          }
+        }
+      }
+    })
+
+    // Fallback B: Match Reels Like button via Comment button sibling
+    allSvgs.forEach((svg) => {
+      let isComment = false
+      const label = (svg.getAttribute('aria-label') || svg.parentElement?.getAttribute('aria-label') || '').toLowerCase()
+      if (label.includes('comment')) {
+        isComment = true
+      } else {
+        const paths = svg.querySelectorAll('path')
+        for (const p of paths) {
+          const d = p.getAttribute('d') || ''
+          if (d.includes('20.656')) {
+            isComment = true
+            break
+          }
+        }
+      }
+      
+      if (isComment) {
+        const commentBtn = svg.closest('button') || svg.closest('[role="button"]')
+        if (commentBtn) {
+          let commentItem: HTMLElement | null = commentBtn
+          let verticalBar = commentBtn.parentElement
+          while (verticalBar && verticalBar.tagName !== 'BODY') {
+            if (verticalBar.children.length >= 3 && Array.from(verticalBar.children).indexOf(commentItem) > 0) {
+              break
+            }
+            commentItem = verticalBar
+            verticalBar = verticalBar.parentElement
+          }
+          
+          if (verticalBar && commentItem) {
+            const index = Array.from(verticalBar.children).indexOf(commentItem)
+            if (index > 0) {
+              const likeItem = verticalBar.children[index - 1] as HTMLElement
+              const children = likeItem.querySelectorAll('span, div')
+              children.forEach((child) => {
+                if (!child.querySelector('svg')) {
+                  const text = (child.textContent || '').trim()
+                  if (/^\d+[\d,\.\sKkMm]*$/.test(text) && text.length < 10) {
+                    child.setAttribute('data-ff-likes-hidden', 'true');
+                    (child as HTMLElement).style.setProperty('display', 'none', 'important')
+                  }
+                }
+              })
+            }
+          }
+        }
+      }
+    })
+  } catch (e) {
+    err('hideInstagramLikesJS failed:', e)
+  }
+}
+
 function hideInstagramCommentsJS(): void {
   if (!currentState?.globalEnabled || !currentState?.instagram.hideComments) {
     restoreInstagramCommentsJS()
@@ -169,7 +489,6 @@ function hideInstagramCommentsJS(): void {
     // 1. Hide comments on feed posts (articles)
     const articles = document.querySelectorAll('article')
     articles.forEach((article) => {
-      // Find the post author
       let authorUsername: string | null = null
       const headerLinks = article.querySelectorAll('header a, header span a')
       for (const link of headerLinks) {
@@ -196,7 +515,7 @@ function hideInstagramCommentsJS(): void {
       // Hide comments in lists under the post
       const commentLists = article.querySelectorAll('ul')
       commentLists.forEach((ul) => {
-        if (ul.closest('header')) return
+        if (ul.closest('header') || ul.closest('section')) return
         const children = ul.children
         let foundCaptionInList = false
         for (let i = 0; i < children.length; i++) {
@@ -234,7 +553,8 @@ function hideInstagramCommentsJS(): void {
       const divs = article.querySelectorAll('div')
       let foundCaptionInFeed = false
       divs.forEach((div) => {
-        if (div === article || div.closest('header') || div.closest('form')) return
+        if (div === article || div.closest('header') || div.closest('form') || div.closest('section')) return
+        if (isLikesElement(div, article, authorUsername)) return
         
         const links = div.querySelectorAll('a')
         if (links.length === 0) return
@@ -350,23 +670,26 @@ function hideInstagramCommentsJS(): void {
       })
     })
 
-    // 3. Find and hide "View all X comments" button by text content
-    const elements = document.querySelectorAll('span, button, a, div')
-    for (let i = 0; i < elements.length; i++) {
-      const el = elements[i] as HTMLElement
-      const text = el.textContent || ''
-      if (
-        (text.includes('View all') || text.includes('View comments') || text.includes('view all')) &&
-        (text.includes('comment') || text.includes('comments')) &&
-        el.offsetWidth > 0
-      ) {
-        const container = el.closest('div') || el
-        if (container !== document.body && container !== document.documentElement) {
-          container.setAttribute('data-ff-comment-hidden', 'true')
-          container.style.setProperty('display', 'none', 'important')
+    // 3. Find and hide "View all X comments" button by text content inside main content and dialogs
+    const containers = document.querySelectorAll('main, div[role="dialog"]')
+    containers.forEach((container) => {
+      const elements = container.querySelectorAll('span, button, a, div')
+      for (let i = 0; i < elements.length; i++) {
+        const el = elements[i] as HTMLElement
+        const text = el.textContent || ''
+        if (
+          (text.includes('View all') || text.includes('View comments') || text.includes('view all')) &&
+          (text.includes('comment') || text.includes('comments')) &&
+          el.offsetWidth > 0
+        ) {
+          const target = el.closest('div') || el
+          if (target !== container && target !== document.body && target !== document.documentElement) {
+            target.setAttribute('data-ff-comment-hidden', 'true')
+            target.style.setProperty('display', 'none', 'important')
+          }
         }
       }
-    }
+    })
 
     // 4. Hide comment input form wrappers
     const textareas = document.querySelectorAll('textarea[placeholder*="comment"], textarea[aria-label*="comment"]')
@@ -389,12 +712,15 @@ function hideInstagramCommentsJS(): void {
 
 function applyRules(state: FeedFreeState): void {
   currentState = state
+  if (!state.globalEnabled) return
+
   const rules = getActiveRules(state)
   log('applyRules — globalEnabled:', state.globalEnabled, 'activeRules:', rules.map(r => r.name))
   try {
     updateStyles(rules)
     removeAntiflicker()
     hideInstagramCommentsJS()
+    hideInstagramLikesJS()
   } catch (e) {
     err('applyRules failed:', e)
   }
@@ -403,6 +729,7 @@ function applyRules(state: FeedFreeState): void {
 function teardownAll(): void {
   unmountAll()
   restoreInstagramCommentsJS()
+  restoreInstagramLikesJS()
   if (cleanupInterval !== null) {
     clearInterval(cleanupInterval)
     cleanupInterval = null
@@ -442,6 +769,7 @@ function setupHeartbeat(): void {
       log('Heartbeat — re-applying rules')
       updateStyles(rules)
       hideInstagramCommentsJS()
+      hideInstagramLikesJS()
     } catch (e) {
       err('Heartbeat failed:', e)
     }
@@ -453,6 +781,7 @@ function setupCleanupInterval(): void {
   cleanupInterval = setInterval(() => {
     if (currentState?.globalEnabled) {
       hideInstagramCommentsJS()
+      hideInstagramLikesJS()
     }
   }, 1000)
 }
