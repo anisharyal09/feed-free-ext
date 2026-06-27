@@ -79,7 +79,7 @@ function handleRedirect(state: FeedFreeState): boolean {
 
     const path = location.pathname
 
-    if (state.instagram.blockDMs && path.startsWith('/direct/')) {
+    if (state.instagram.blockDMs && path.startsWith('/direct')) {
       if (state.instagram.nukeMainFeed && state.instagram.conflictRedirectTarget === 'saved') {
         const username = getUsernameFromProfileUrl(getProfileUrl())
         if (username) { log('blockDMs + nukeMainFeed — redirecting to saved'); location.replace(`/${username}/saved/`) }
@@ -88,6 +88,12 @@ function handleRedirect(state: FeedFreeState): boolean {
         const username = getUsernameFromProfileUrl(getProfileUrl())
         location.replace(username ? `/${username}/` : '/')
       }
+      return true
+    }
+
+    if (state.instagram.nukeNotifications && path.startsWith('/notifications')) {
+      const username = getUsernameFromProfileUrl(getProfileUrl())
+      location.replace(username ? `/${username}/` : '/')
       return true
     }
 
@@ -223,31 +229,45 @@ function getLikesElementsForArticle(article: HTMLElement, authorUsername: string
 
   const next = actionSection.nextElementSibling as HTMLElement | null
   if (next) {
-    if (isCaptionEl(next) && next.children.length > 0) {
-      let child = next.firstElementChild as HTMLElement | null
-      while (child) {
-        if (child.querySelector('form, textarea, input')) {
-          break
-        }
-        if (isCaptionEl(child)) {
-          break
-        }
+    const isDetailsContainer = next.classList.contains('x1o61qjw') || next.classList.contains('x12nagc') || next.querySelector('form, textarea, input, ul, ol')
+    if (isDetailsContainer && next.children.length > 0) {
+      const child = next.firstElementChild as HTMLElement | null
+      if (child && !child.querySelector('form, textarea, input')) {
+        const text = (child.textContent || '').trim().toLowerCase()
+        const isLikesText = 
+          text.includes('like') || 
+          text.includes('likes') || 
+          text.includes('liked by') ||
+          text.includes('gusta') ||
+          text.includes('aime') ||
+          text.includes('gefällt') ||
+          text.includes('piace') ||
+          text.includes('curti') ||
+          text.includes('нравится') ||
+          /^\d+[\d,\.\sKkMm]*$/.test(text)
         
-        likesEls.push(child)
-        child = child.nextElementSibling as HTMLElement | null
+        if (isLikesText && !isCaptionEl(child)) {
+          likesEls.push(child)
+        }
       }
     } else {
-      let sibling: HTMLElement | null = next
-      while (sibling) {
-        if (sibling.querySelector('form, textarea, input')) {
-          break
-        }
-        if (isCaptionEl(sibling)) {
-          break
-        }
+      if (!next.querySelector('form, textarea, input')) {
+        const text = (next.textContent || '').trim().toLowerCase()
+        const isLikesText = 
+          text.includes('like') || 
+          text.includes('likes') || 
+          text.includes('liked by') ||
+          text.includes('gusta') ||
+          text.includes('aime') ||
+          text.includes('gefällt') ||
+          text.includes('piace') ||
+          text.includes('curti') ||
+          text.includes('нравится') ||
+          /^\d+[\d,\.\sKkMm]*$/.test(text)
         
-        likesEls.push(sibling)
-        sibling = sibling.nextElementSibling as HTMLElement | null
+        if (isLikesText && !isCaptionEl(next)) {
+          likesEls.push(next)
+        }
       }
     }
   }
@@ -257,7 +277,7 @@ function getLikesElementsForArticle(article: HTMLElement, authorUsername: string
     let curr = likesLink.parentElement
     while (curr && curr !== article) {
       const parent = curr.parentElement
-      if (parent === article || (parent && parent === actionSection.nextElementSibling)) {
+      if (parent === article || (parent && (parent === actionSection.nextElementSibling || parent.classList.contains('x1o61qjw')))) {
         if (!likesEls.includes(curr)) {
           likesEls.push(curr)
         }
@@ -347,7 +367,13 @@ function hideInstagramLikesJS(): void {
       sections.forEach((sec) => {
         if (sec.querySelector('form, textarea, input')) return
         if (sec.querySelector('svg[aria-label="Like"], svg[aria-label="Unlike"], svg[aria-label="Comment"], svg[aria-label="Share"]')) return
+        if (sec.classList.contains('x1o61qjw') || sec.classList.contains('x12nagc') || sec.classList.contains('x1gslohp')) return
         
+        if (authorUsername) {
+          const hasAuthor = sec.querySelector(`a[href="/${authorUsername}/"], a[href="/${authorUsername}"]`)
+          if (hasAuthor) return
+        }
+
         const text = sec.textContent || ''
         if (
           text.includes('like') ||

@@ -137,14 +137,13 @@ export function InstagramPanel() {
       />
 
       <Row
-        label="Hide Likes"
-        hint="Hide like counts on posts and reels"
-        checked={state.instagram.hideLikes}
+        label="Hide Comments & Likes Count"
+        hint="Hide comments, comments count, and post likes count"
+        checked={state.instagram.hideComments}
         disabled={disabled}
         activeColor={activeColor}
-        onChange={(v) => setInstagram({ hideLikes: v })}
+        onChange={(v) => setInstagram({ hideComments: v, hideLikes: v })}
       />
-
       <Row
         label="Hide Notifications"
         hint="Remove notifications tab from sidebar"
@@ -152,14 +151,6 @@ export function InstagramPanel() {
         disabled={disabled}
         activeColor={activeColor}
         onChange={(v) => setInstagram({ nukeNotifications: v })}
-      />
-      <Row
-        label="Hide Comments"
-        hint="Hide comment sections, comment buttons, and comment counts"
-        checked={state.instagram.hideComments}
-        disabled={disabled}
-        activeColor={activeColor}
-        onChange={(v) => setInstagram({ hideComments: v })}
       />
       <Row
         label="Hide Professional Dashboard"

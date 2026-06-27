@@ -19,26 +19,26 @@ export function YouTubePanel() {
       />
       <Row
         label="Hide Shorts"
-        hint="Remove Shorts from sidebar and homepage"
-        checked={state.youtube.nukeShortsFromProfiles || state.youtube.nukeShorts}
-        disabled={disabled || state.youtube.nukeShortsFromProfiles}
+        hint="Remove Shorts from sidebar, homepage, and channel pages"
+        checked={state.youtube.nukeShorts && state.youtube.nukeShortsFromProfiles}
+        disabled={disabled}
         activeColor={activeColor}
-        onChange={(v) => setYouTube({ nukeShorts: v })}
+        onChange={(v) => {
+          if (v) {
+            setYouTube({ nukeShorts: v, nukeShortsFromProfiles: v })
+          } else {
+            setYouTube({ nukeShorts: v, nukeShortsFromProfiles: v, nukeSearchShorts: false })
+          }
+        }}
       />
       <div style={{ paddingLeft: '16px', borderLeft: '2px solid var(--border)', marginLeft: '10px' }}>
         <Row
-          label="Hide Shorts Everywhere"
-          hint="Remove Shorts tab and thumbnails from channel pages"
-          checked={state.youtube.nukeShortsFromProfiles}
-          disabled={disabled}
+          label="Hide Search Shorts"
+          hint="Remove Shorts shelves and cards from search results"
+          checked={state.youtube.nukeSearchShorts}
+          disabled={disabled || !state.youtube.nukeShorts}
           activeColor={activeColor}
-          onChange={(v) => {
-            if (v) {
-              setYouTube({ nukeShortsFromProfiles: true, nukeShorts: true })
-            } else {
-              setYouTube({ nukeShortsFromProfiles: false })
-            }
-          }}
+          onChange={(v) => setYouTube({ nukeSearchShorts: v })}
         />
       </div>
       <Row
@@ -115,7 +115,7 @@ export function YouTubePanel() {
         onChange={(v) => setYouTube({ nukeMoreFromYouTube: v })}
       />
       <Row
-        label="Music Mode"
+        label="Audio Only Mode"
         hint="Black out video, keep audio playing"
         checked={state.youtube.musicOnlyMode}
         disabled={disabled}
@@ -125,7 +125,7 @@ export function YouTubePanel() {
       {state.youtube.musicOnlyMode && (
         <div style={{ paddingLeft: '16px', borderLeft: '2px solid var(--border)', marginLeft: '10px' }}>
           <Row
-            label="Show Screen Overlay"
+            label="Show Audio Only Overlay"
             hint="Display visualizer & controls on black screen"
             checked={state.youtube.musicOnlyShowOverlay}
             disabled={disabled}

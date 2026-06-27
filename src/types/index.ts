@@ -18,6 +18,7 @@ export interface YouTubeState {
   musicOnlyShowOverlay: boolean
   grayMode: boolean
   nukeShortsFromProfiles: boolean
+  nukeSearchShorts: boolean
 }
 
 export interface InstagramState {

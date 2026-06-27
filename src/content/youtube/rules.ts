@@ -16,6 +16,7 @@ export type YouTubeRuleKey =
   | 'notifications'
   | 'moreFromYouTube'
   | 'shortsProfiles'
+  | 'searchShorts'
 
 export interface ActiveRule {
   name: YouTubeRuleKey
@@ -37,6 +38,7 @@ const RULE_MAP: Record<YouTubeRuleKey, string> = {
   notifications: 'notifications',
   moreFromYouTube: 'moreFromYouTube',
   shortsProfiles: 'shortsProfiles',
+  searchShorts: 'searchShorts',
 }
 
 export function getActiveRules(state: FeedFreeState): ActiveRule[] {
@@ -60,6 +62,12 @@ export function getActiveRules(state: FeedFreeState): ActiveRule[] {
     rules.push({
       name: 'shortsProfiles',
       selectors: getSelectorEntries('youtube', RULE_MAP.shortsProfiles),
+    })
+  }
+  if (state.youtube.nukeSearchShorts) {
+    rules.push({
+      name: 'searchShorts',
+      selectors: getSelectorEntries('youtube', RULE_MAP.searchShorts),
     })
   }
   if (state.youtube.nukeSidebarRecs) {

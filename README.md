@@ -29,8 +29,8 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 
 ### YouTube
 - **Hide Home Feed** — Remove the algorithmic video grid from youtube.com.
-- **Hide Shorts** — Remove Shorts from sidebar and homepage.
-- **Hide Shorts Everywhere** — Remove Shorts tab and thumbnails from channel pages.
+- **Hide Shorts** — Remove Shorts from homepage, sidebar, and channel profile pages.
+- **Hide Search Shorts** — Remove Shorts shelves and video results completely from search pages, with a smart warning notice at the top-center of the page when results are hidden.
 - **Hide Recommendations** — Clear suggested recommendations next to/below the player and playlist pages (leaves playlists visible).
 - **Hide Entire Sidebar** — Completely hide the sidebar, stretching the video player to full width.
 - **Hide Comments** — Remove the entire comments section.
@@ -40,14 +40,13 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 - **Hide Report History** — Remove Report History link from guide/sidebar.
 - **Hide Notifications** — Remove the notifications bell and activity links from the top bar and sidebar.
 - **Hide More from YouTube** — Remove the "More from YouTube" category block from the guide/sidebar.
-- **Dynamic Music Mode** — Black out the video player (keep audio playing) with a floating toggle button on the player UI to switch back-and-forth directly, plus an optional screen overlay.
-- **Dynamic Music Mode** — Black out the video player (keep audio playing) with a **draggable** floating toggle button on the player UI to switch back-and-forth directly, plus an optional screen visual overlay option.
+- **Audio Only Mode** — Black out the video player (keep audio playing) with a **draggable** floating toggle button on the player UI to switch back-and-forth directly, plus an optional screen visual overlay option.
 - **Grayscale Mode** — Turn YouTube completely black & white.
 
 ### Instagram
 - **Following Feed** — Auto-redirect to the Following timeline instead of the algorithmic Home feed.
 - **Redirect to DMs** — Go straight to `/direct/inbox/` on open instead of the feed.
-- **Hide DMs** — Remove DM navigation and redirect away from the messages inbox.
+- **Hide DMs** — Remove DM navigation (including header/sidebar Message buttons, the floating bottom-right Messages button, and unread count badges) and redirect away from the messages inbox.
 - **Hide Reels** — Remove Reels from sidebar/navigation menus (keeping profile reels visible) and auto-redirect away from `/reels/`.
 - **Hide Explore** — Remove the Explore tab and auto-redirect.
 - **Hide Professional Dashboard** — Remove Professional Dashboard link and icon from the sidebar navigation on creator/business profiles.
@@ -55,9 +54,8 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 - **Hide Stories Everywhere** — Completely remove the stories tray, highlights, and story rings (plus auto-redirect from `/stories/`).
 - **Square Profile Photos** — Render profile pictures and story rings as soft squares.
 - **Hide Notes** — Block status note bubbles from profiles and inbox.
-- **Hide Likes** — Remove likes counts on posts, reels, hover cards, and profile page follower counts.
-- **Hide Notifications** — Remove notifications tab from sidebar.
-- **Hide Comments** — Remove comment sections, comment counts, icons, and input forms from posts/reels.
+- **Hide Comments & Likes Count** — Hide comment sections, comments count, and post likes count (while keeping the interactive Like, Comment, Share, and Save button icons visible).
+- **Hide Notifications** — Remove notifications tab from sidebar and hide floating notification tooltips (Like/Comment/Follow indicators).
 - **Conflict Resolution** — Choose redirect target (Profile or Saved) when both "Redirect to DMs" and "Hide DMs" are enabled simultaneously.
 - **Grayscale Mode** — Turn Instagram completely black & white.
 

@@ -124,3 +124,9 @@ body {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
+
+.tooltip-left::after {
+  left: auto;
+  right: 0;
+  transform-origin: bottom right;
+}

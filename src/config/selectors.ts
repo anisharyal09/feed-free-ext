@@ -44,17 +44,14 @@ export const YOUTUBE: Record<string, SelectorRule | SelectorRule[]> = {
   ],
   shorts: [
     {
-      selector: 'a[href^="/shorts"]:not(ytd-playlist-video-renderer a):not(ytd-playlist-panel-video-renderer a):not(ytd-playlist-video-list-renderer a):not(ytd-browse[page-subtype="channels"] a)',
-      fallbacks: [
-        'ytd-guide-entry-renderer[aria-label="Shorts"]',
-        'a[title="Shorts"]',
-      ],
+      selector: 'ytd-guide-entry-renderer[aria-label="Shorts"]',
+      fallbacks: ['a[title="Shorts"]'],
       property: 'display',
       value: 'none',
     },
     {
       selector: 'ytd-mini-guide-entry-renderer[aria-label="Shorts"]',
-      fallbacks: ['a[href^="/shorts"]:not(ytd-playlist-video-renderer a):not(ytd-playlist-panel-video-renderer a):not(ytd-playlist-video-list-renderer a):not(ytd-browse[page-subtype="channels"] a)'],
+      fallbacks: [],
       property: 'display',
       value: 'none',
     },
@@ -64,6 +61,58 @@ export const YOUTUBE: Record<string, SelectorRule | SelectorRule[]> = {
         '#shorts-inner-container',
         'ytd-rich-section-renderer ytd-reel-shelf-renderer',
       ],
+      property: 'display',
+      value: 'none',
+    },
+  ],
+  searchShorts: [
+    {
+      selector: 'ytd-video-renderer:has(a[href^="/shorts"]):not(ytd-playlist-video-renderer):not(ytd-playlist-panel-video-renderer):not(ytd-playlist-video-list-renderer):not(ytd-browse[page-subtype="channels"] ytd-video-renderer)',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      selector: 'ytd-rich-item-renderer:has(a[href^="/shorts"]):not(ytd-browse[page-subtype="channels"] ytd-rich-item-renderer)',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      selector: 'ytd-grid-video-renderer:has(a[href^="/shorts"]):not(ytd-browse[page-subtype="channels"] ytd-grid-video-renderer)',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      selector: 'ytd-compact-video-renderer:has(a[href^="/shorts"])',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      selector: 'ytd-reel-item-renderer',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      selector: 'yt-reel-item-renderer',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Modern search grid shelf containing Shorts
+      selector: 'grid-shelf-view-model:has(ytm-shorts-lockup-view-model), grid-shelf-view-model:has(ytm-shorts-lockup-view-model-v2)',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Modern individual search Shorts lockup items
+      selector: 'ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2',
+      fallbacks: [],
       property: 'display',
       value: 'none',
     },
@@ -437,15 +486,38 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
     property: 'display',
     value: 'none',
   },
-  dms: {
-    selector: 'a[href^="/direct"]',
-    fallbacks: [
-      'a[href*="direct"]',
-      'div[role="navigation"] a[href*="direct"]',
-    ],
-    property: 'display',
-    value: 'none',
-  },
+  dms: [
+    {
+      selector: 'a[href^="/direct"]',
+      fallbacks: [
+        'a[href*="direct"]',
+        'div[role="navigation"] a[href*="direct"]',
+      ],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Messages/Direct button in header/navigation (covers role="button" layout)
+      selector: 'div[role="button"]:has(svg[aria-label="Messages"]), div[role="button"]:has(svg[aria-label="Direct"]), div[role="button"]:has(svg[aria-label="Messenger"])',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Fallback matching Messages SVG path geometry
+      selector: 'div[role="button"]:has(svg path[d^="M13.973 20.046"]), div[role="button"]:has(svg path[d^="M13.973"])',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Floating DM notification tooltips
+      selector: 'div[role="tooltip"]:has([aria-label*="Direct messaging"]), div[role="tooltip"]:has(a[href*="/direct/"])',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    }
+  ],
   grayMode: {
     selector: 'html',
     fallbacks: [],
@@ -763,11 +835,18 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
       property: 'display',
       value: 'none',
     },
+    {
+      // Floating notification summary tooltips (Comment/Like/Follow indicators)
+      selector: 'div[role="tooltip"]:has(._9--g), div[role="tooltip"]:has(._9-_k), div[role="tooltip"]:has(._9_18), div[role="tooltip"]:has(._aa5a), div[role="tooltip"]:has([aria-label="Comments"]), div[role="tooltip"]:has([aria-label="Like"]), div[role="tooltip"]:has([aria-label="Relationships"])',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    }
   ],
   comments: [
 
     {
-      selector: 'a[href*="/comments/"], a[href$="/comments/"], a[href$="/comments"], div:has(> a[href*="/comments/"])',
+      selector: '.x1o61qjw.x12nagc.x1gslohp a[href*="/comments/"], .x1o61qjw.x12nagc.x1gslohp a[href*="/comments"], div.x1o61qjw.x12nagc.x1gslohp div:has(> a[href*="/comments/"])',
       fallbacks: [],
       property: 'display',
       value: 'none',
@@ -832,20 +911,36 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
       value: 'none',
     },
     {
-      selector: '.x6s0dn4.xrvj5dj.x19g8pj0.x1dh5ka.xyamay9.x1l90r2v.x1mu97ne',
+      selector: '.x19g8pj0.x1dh5ka.xyamay9.x1l90r2v.x1mu97ne',
       fallbacks: [],
       property: 'display',
       value: 'none',
     },
     {
       // Post comments counts in feed/Reels
-      selector: '.x6s0dn4.xrvj5dj.x1o61qjw.x12nagc.x1gslohp:has(svg[aria-label="Comment"], [aria-label="Comment"]) .x1ypdohk.x1s688f.x2fvf9.xe9ewy2',
-      fallbacks: [],
+      selector: '.x1o61qjw.x12nagc.x1gslohp > div:not(:first-child) .x1ypdohk.x1s688f.x2fvf9.xe9ewy2',
+      fallbacks: [
+        'button:has(svg[aria-label="Comment"]) span, [role="button"]:has(svg[aria-label="Comment"]) span'
+      ],
       property: 'display',
       value: 'none',
     },
     {
       selector: '._ac7v.x1ty9z65.xzboxd6>div>a>div.x1ey2m1c>*:last-child',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Post likes counts (hides likes count when comments are hidden)
+      selector: 'a[href*="/liked_by/"], a[href*="/likers/"], div:has(> a[href*="/liked_by/"]), div:has(> a[href*="/likers/"])',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Post likes & comments counts in feed (spans with role="button")
+      selector: '.x1o61qjw.x12nagc.x1gslohp span.x1ypdohk.x1s688f.x2fvf9.xe9ewy2[role="button"]',
       fallbacks: [],
       property: 'display',
       value: 'none',
@@ -866,13 +961,6 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
     }
   ],
   likes: [
-    {
-      // Post likes counts
-      selector: 'section > .x9f619.xjbqb8w.x78zum5.x168nmei.x13lgxp2.x5pf9jr.xo71vjh.x1n2onr6.x1plvlek.xryxfnj.x1iyjqo2.x2lwn1j.xeuugli.x1q0g3np.xqjyukv.x6s0dn4.x1oa3qoh.x1nhvcw1, .x9f619.xjbqb8w.x78zum5.x168nmei.x13lgxp2.x5pf9jr.xo71vjh.xr1yuqi.xkrivgy.x4ii5y1.x1gryazu.x1n2onr6.x1plvlek.xryxfnj.x1iyjqo2.x2lwn1j.xeuugli.xdt5ytf.x1a02dak.xqjyukv.x1cy8zhl.x1oa3qoh.x1nhvcw1',
-      fallbacks: [],
-      property: 'display',
-      value: 'none',
-    },
     {
       // Reels likes count
       selector: 'div.xdj266r.x11i5rnm.x1mh8g0r.xexx8yu.x4uap5.x18d9i69:has(svg>path[d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"]) .html-span.xdj266r',
@@ -901,13 +989,6 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
       value: 'none',
     },
     {
-      // Post likes section (liked by and likes count)
-      selector: '.html-div.xdj266r.x14z9mp.x1lziwak.xexx8yu.xyri2b.x18d9i69.x1c1uobl.x6s0dn4.x1ypdohk.x78zum5.xdt5ytf.xieb3on span.x1vvkbs, .html-div.xdj266r.x14z9mp.x1lziwak.xexx8yu.xyri2b.x18d9i69.x1c1uobl.x6s0dn4.x1ypdohk.x78zum5.xdt5ytf.xieb3on>div:nth-child(2)',
-      fallbacks: [],
-      property: 'display',
-      value: 'none',
-    },
-    {
       // Grid post hover likes count (alternative grid selector)
       selector: '._ac7v.x1ty9z65.xzboxd6>div>a>div.x1ey2m1c>*:first-child, .x12nagc.x182iqb8.xv54qhq.xf7dkkf:has(.html-span.xdj266r.x14z9mp.xat24cr.x1lziwak.xexx8yu)',
       fallbacks: [],
@@ -916,7 +997,14 @@ export const INSTAGRAM: Record<string, SelectorRule | SelectorRule[]> = {
     },
     {
       // Post likes counts in feed
-      selector: '.x6s0dn4.xrvj5dj.x1o61qjw.x12nagc.x1gslohp:not(:has(svg[aria-label="Comment"], [aria-label="Comment"])) .x1ypdohk.x1s688f.x2fvf9.xe9ewy2',
+      selector: 'a[href*="/liked_by/"], a[href*="/likers/"], div:has(> a[href*="/liked_by/"]), div:has(> a[href*="/likers/"])',
+      fallbacks: [],
+      property: 'display',
+      value: 'none',
+    },
+    {
+      // Post likes counts in feed (spans with role="button")
+      selector: '.x1o61qjw.x12nagc.x1gslohp span.x1ypdohk.x1s688f.x2fvf9.xe9ewy2[role="button"]',
       fallbacks: [],
       property: 'display',
       value: 'none',

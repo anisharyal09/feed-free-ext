@@ -17,8 +17,8 @@ let heartbeat: ReturnType<typeof setInterval> | null = null
 let musicToggleHiddenForSession = false
 
 const DEFAULT_MUSIC_TOGGLE_POSITION = {
-  x: 0.90,
-  y: 0.08,
+  x: 0.96,
+  y: 0.04,
 }
 
 const MUSIC_TOGGLE_EDGE_MARGIN = 12
@@ -96,6 +96,8 @@ async function saveMusicTogglePosition(x: number, y: number): Promise<void> {
 }
 
 function applyMusicTogglePosition(button: HTMLElement, player: HTMLElement, state: FeedFreeState): void {
+  if ((button as MusicToggleElement).__ffIsDragging) return
+
   const { x, y } = getMusicTogglePosition(state)
   const bounds = getMusicToggleBounds(player, button)
   const left = bounds.minX + ((bounds.maxX - bounds.minX) * x)
@@ -124,20 +126,6 @@ function attachMusicToggleDrag(
     latestTop: 0,
   }
 
-  const updateFromPointer = (event: PointerEvent) => {
-    const rect = player.getBoundingClientRect()
-    const bounds = getMusicToggleBounds(player, button)
-    dragState.latestLeft = clamp(event.clientX - rect.left, bounds.minX, bounds.maxX)
-    dragState.latestTop = clamp(event.clientY - rect.top, bounds.minY, bounds.maxY)
-
-    if (dragState.frameId !== null) return
-    dragState.frameId = window.requestAnimationFrame(() => {
-      dragState.frameId = null
-      button.style.left = `${dragState.latestLeft}px`
-      button.style.top = `${dragState.latestTop}px`
-    })
-  }
-
   button.addEventListener('pointerdown', (event) => {
     if (event.button !== 0) return
     dragState.dragging = false
@@ -163,7 +151,13 @@ function attachMusicToggleDrag(
     }
     if (!dragState.dragging) return
     event.preventDefault()
-    updateFromPointer(event)
+
+    const rect = player.getBoundingClientRect()
+    const bounds = getMusicToggleBounds(player, button)
+    dragState.latestLeft = clamp(event.clientX - rect.left, bounds.minX, bounds.maxX)
+    dragState.latestTop = clamp(event.clientY - rect.top, bounds.minY, bounds.maxY)
+    button.style.left = `${dragState.latestLeft}px`
+    button.style.top = `${dragState.latestTop}px`
   })
 
   button.addEventListener('pointerup', async (event) => {
@@ -430,7 +424,7 @@ function manageMusicOverlay(state: FeedFreeState): void {
 
       const title = document.createElement('h3')
       title.className = 'ff-music-title'
-      title.textContent = 'Music Only Mode Active'
+      title.textContent = 'Audio Only Mode Active'
 
       const button = document.createElement('button')
       button.className = 'ff-music-btn'
@@ -489,14 +483,14 @@ function manageMusicOverlay(state: FeedFreeState): void {
       const musicToggleButton = toggleBtn as MusicToggleElement
       toggleBtn.id = 'ff-music-toggle-btn'
       toggleBtn.title = 'Drag to move. Alt+click hides this button until refresh.'
-      toggleBtn.setAttribute('aria-label', isMusicOnly ? 'Switch to Video' : 'Enable Music Mode')
+      toggleBtn.setAttribute('aria-label', isMusicOnly ? 'Switch to Video' : 'Enable Audio Mode')
       toggleBtn.innerHTML = `
         <svg class="ff-music-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px; margin-right: 2px;">
           <path d="M9 18V5l12-2v13"></path>
           <circle cx="6" cy="18" r="3"></circle>
           <circle cx="18" cy="16" r="3"></circle>
         </svg>
-        <span>${isMusicOnly ? 'Switch to Video' : 'Music Mode'}</span>
+        <span>${isMusicOnly ? 'Switch to Video' : 'Audio Mode'}</span>
       `
 
       player.appendChild(toggleBtn)
@@ -534,8 +528,8 @@ function manageMusicOverlay(state: FeedFreeState): void {
         applyMusicTogglePosition(existingToggle as HTMLElement, player, state)
         const span = existingToggle.querySelector('span')
         if (span) {
-          span.textContent = isMusicOnly ? 'Switch to Video' : 'Music Mode'
-          existingToggle.setAttribute('aria-label', isMusicOnly ? 'Switch to Video' : 'Enable Music Mode')
+          span.textContent = isMusicOnly ? 'Switch to Video' : 'Audio Mode'
+          existingToggle.setAttribute('aria-label', isMusicOnly ? 'Switch to Video' : 'Enable Audio Mode')
         }
       }
     }
@@ -665,6 +659,145 @@ function hideYouTubeEndScreensJS(): void {
   }
 }
 
+let lastShownQuery: string | null = null
+let currentToastElement: HTMLDivElement | null = null
+
+function checkAndShowShortsSearchNotification(): void {
+  if (!currentState?.globalEnabled) return
+  if (!currentState.youtube.nukeSearchShorts) {
+    if (currentToastElement) {
+      currentToastElement.remove()
+      currentToastElement = null
+    }
+    return
+  }
+
+  // Dismiss if navigate away from search
+  if (location.pathname !== '/results') {
+    if (currentToastElement) {
+      currentToastElement.remove()
+      currentToastElement = null
+    }
+    return
+  }
+
+  const searchParams = new URLSearchParams(location.search)
+  const query = searchParams.get('search_query') || ''
+  if (!query) return
+
+  // Prevent multiple popups for same query
+  if (lastShownQuery === query) return
+
+  // Wait a moment for search results to load
+  setTimeout(() => {
+    if (location.pathname !== '/results') return
+    const currentParams = new URLSearchParams(location.search)
+    if (currentParams.get('search_query') !== query) return
+
+    let hasHiddenShorts = false
+    try {
+      const renderers = document.querySelectorAll('ytd-video-renderer, ytd-reel-shelf-renderer, ytd-compact-video-renderer, ytd-reel-item-renderer, yt-reel-item-renderer, grid-shelf-view-model, ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2')
+      for (let i = 0; i < renderers.length; i++) {
+        const r = renderers[i]
+        const tag = r.tagName.toUpperCase()
+        if (
+          tag === 'YTD-REEL-SHELF-RENDERER' ||
+          tag === 'YTD-REEL-ITEM-RENDERER' ||
+          tag === 'YT-REEL-ITEM-RENDERER' ||
+          tag === 'GRID-SHELF-VIEW-MODEL' ||
+          tag === 'YTM-SHORTS-LOCKUP-VIEW-MODEL' ||
+          tag === 'YTM-SHORTS-LOCKUP-VIEW-MODEL-V2' ||
+          r.querySelector('a[href^="/shorts"], a[href*="/shorts/"]')
+        ) {
+          hasHiddenShorts = true
+          break
+        }
+      }
+    } catch { }
+
+    if (hasHiddenShorts) {
+      lastShownQuery = query
+      showShortsNotification()
+    }
+  }, 1800)
+}
+
+function showShortsNotification(): void {
+  if (document.getElementById('ff-shorts-toast')) return
+
+  const toast = document.createElement('div')
+  toast.id = 'ff-shorts-toast'
+
+  const isDark = document.documentElement.hasAttribute('dark') ||
+    document.querySelector('html')?.getAttribute('system-tracker') === 'dark' ||
+    getComputedStyle(document.body).backgroundColor !== 'rgb(255, 255, 255)'
+
+  Object.assign(toast.style, {
+    position: 'fixed',
+    top: '90px',
+    left: '50%',
+    transform: 'translateX(-50%) translateY(-20px)',
+    backgroundColor: isDark ? '#212121' : '#ffffff',
+    color: isDark ? '#ffffff' : '#0f0f0f',
+    padding: '12px 18px',
+    borderRadius: '12px',
+    fontSize: '13px',
+    fontWeight: '500',
+    fontFamily: 'Roboto, Arial, sans-serif',
+    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.35)',
+    border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.05)',
+    zIndex: '99999',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+    opacity: '0',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    pointerEvents: 'auto',
+  })
+
+  const textNode = document.createElement('span')
+  textNode.textContent = "Shorts results were hidden. Disable 'Hide Search Shorts' in Feed Free to see them."
+  toast.appendChild(textNode)
+
+  const dismissBtn = document.createElement('button')
+  dismissBtn.textContent = 'Dismiss'
+  Object.assign(dismissBtn.style, {
+    background: 'none',
+    border: 'none',
+    color: '#3ea6ff',
+    cursor: 'pointer',
+    fontSize: '13px',
+    fontWeight: '600',
+    padding: '0 4px',
+    outline: 'none',
+  })
+
+  const dismissToast = () => {
+    clearTimeout(autoDismissTimer)
+    toast.style.transform = 'translateX(-50%) translateY(-20px)'
+    toast.style.opacity = '0'
+    setTimeout(() => {
+      toast.remove()
+      if (currentToastElement === toast) {
+        currentToastElement = null
+      }
+    }, 300)
+  }
+
+  dismissBtn.addEventListener('click', dismissToast)
+  toast.appendChild(dismissBtn)
+
+  document.body.appendChild(toast)
+  currentToastElement = toast
+
+  requestAnimationFrame(() => {
+    toast.style.transform = 'translateX(-50%) translateY(0)'
+    toast.style.opacity = '1'
+  })
+
+  const autoDismissTimer = setTimeout(dismissToast, 6000)
+}
+
 function applyRules(state: FeedFreeState): void {
   currentState = state
   if (!state.globalEnabled) return
@@ -677,6 +810,7 @@ function applyRules(state: FeedFreeState): void {
     manageMusicOverlay(state)
     injectShadowStyles(state)
     hideYouTubeEndScreensJS()
+    checkAndShowShortsSearchNotification()
     if (stylesChanged) {
       setTimeout(() => {
         window.dispatchEvent(new Event('resize'))
@@ -693,6 +827,10 @@ function teardownAll(): void {
   document.getElementById('ff-music-overlay')?.remove()
   document.getElementById('ff-music-toggle-btn')?.remove()
   document.getElementById('ff-music-ui-style')?.remove()
+  if (currentToastElement) {
+    currentToastElement.remove()
+    currentToastElement = null
+  }
   const player = document.getElementById('movie_player') || document.querySelector('.html5-video-player')
   player?.classList.remove('ff-music-no-overlay')
   if (cleanupInterval !== null) {

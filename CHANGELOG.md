@@ -7,15 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.2.5] - 2026-06-28
+
+### Added
+- **YouTube Hide Search Shorts**: Added a dedicated "Hide Search Shorts" option to hide Shorts shelf carousels and lockup results completely from search pages, removing blank spacing and metadata (like views/menus) entirely.
+- **YouTube Search Notification**: Displays a sleek, premium, auto-dismissing toast at the top-center of the page (below the search bar) when searching on YouTube and some Shorts results are hidden, letting the user know they can disable the "Hide Search Shorts" feature to view them.
+- **Instagram DM Buttons**: Hides the *navigation/header Direct Messages button/icon, the floating "Messages" pill button at the bottom right corner, and their unread notification badges* when the "Hide DMs" option is enabled.
+- **Instagram Notification Tooltips**: Hides the floating notification summary tooltips (popups showing likes, comments, and follow updates) when "Hide Notifications" is enabled.
+
+### Fixed
+- **YouTube Search Shorts**: Fixed search results layout showing empty spacings, views counts, and 3-dot menus for hidden Shorts by hiding the entire video renderer containers completely on search pages.
+
+### Changed
+- **YouTube settings**: Renamed **"Music Mode"** to **"Audio Only Mode"** (and its visualizer to **"Audio Only Overlay"**) to better reflect its versatility for podcasts, video essays, and lectures as well as music.
+- **YouTube Audio Only Mode**: Moved the default in-player toggle button to the upper top-right corner (`top: 4%`, `right: 4%`) and dramatically optimized dragging responsiveness, eliminating the 1-frame latency lag.
+- **Instagram Popup Panel**: Merged the "Hide Likes" toggle into the "Hide Comments" toggle, renaming it to "Hide Comments & Likes Count" to provide a cleaner and more streamlined user interface.
+- Patched version to `v1.2.5` across all manifests and documentation.
+
+
 ## [v1.2.4] - 2026-06-24
 
 ### Fixed
 - **YouTube Performance**: Fixed Shorts scrolling lag and hover playback loops by optimizing MutationObservers and DOM queries.
-- **Instagram Comments**: Kept the comment button/icon visible for visual layout balance while hiding comment lists, textareas, and counts.
-- **Instagram Likes Separation**: Separated post likes counts from comments-hiding logic using precise parent-container qualifiers to prevent feature overlap.
-- **Store Badges**: Aligned and centered badges side-by-side in README.md.
+- **Instagram Comments**: Kept comment bubble icons visible for layout balance while hiding lists, textareas, and counts.
+- **Instagram Likes**: Fully separated likes and comments count selectors using precise parent-container qualifiers to prevent feature overlap.
 
 ### Changed
+- **Store Badges**: Aligned and centered badges side-by-side in README.md.
 - Patched version to `v1.2.4` across all manifests and documentation.
 
 

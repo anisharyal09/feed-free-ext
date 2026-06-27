@@ -19,6 +19,7 @@ const YOUTUBE_TOGGLES: Record<
     | 'nukeMoreFromYouTube'
     | 'grayMode'
     | 'nukeShortsFromProfiles'
+    | 'nukeSearchShorts'
   >,
   string
 > = {
@@ -34,6 +35,7 @@ const YOUTUBE_TOGGLES: Record<
   nukeMoreFromYouTube: 'moreFromYouTube',
   grayMode: 'grayMode',
   nukeShortsFromProfiles: 'shortsProfiles',
+  nukeSearchShorts: 'searchShorts',
 }
 
 const INSTAGRAM_TOGGLES: Record<
