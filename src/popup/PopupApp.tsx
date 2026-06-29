@@ -208,60 +208,59 @@ export default function PopupApp() {
             </button>
 
             {isDropdownOpen && (
-              <div className="absolute top-full right-0 mt-1.5 z-50 rounded-xl border backdrop-blur-md shadow-xl overflow-hidden animate-dropdown-in"
+              <div className="absolute top-full right-0 mt-2 z-50 rounded-xl border backdrop-blur-md shadow-xl animate-dropdown-in flex flex-col gap-1"
                 style={{
-                  width: '160px',
+                  width: '144px',
+                  padding: '8px 6px',
                   background: 'var(--dropdown-menu-bg)',
                   borderColor: 'var(--surface-border)',
-                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4)'
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3)'
                 }}>
                 <button
                   onClick={() => { setSelectedSite('auto'); setIsDropdownOpen(false); }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-all duration-150 active:scale-[0.98] cursor-pointer"
-                  style={{ color: 'var(--text)' }}
+                  className="w-full flex items-center gap-3 pl-4 pr-3 py-2 text-left transition-all duration-150 active:scale-[0.98] cursor-pointer rounded-lg"
+                  style={{ color: 'var(--text)', background: 'transparent' }}
                   onMouseEnter={(e) => e.currentTarget.style.background = 'var(--row-hover)'}
                   onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                 >
-                  <div className="flex items-center justify-center w-5 h-5 rounded-lg shrink-0" style={{ background: 'var(--btn-bg)' }}>
+                  <div className="flex items-center justify-center w-5 h-5 rounded-md shrink-0" style={{ background: 'var(--btn-bg)' }}>
                     {getSiteIcon('auto')}
                   </div>
-                  <span className="text-[11px] font-semibold block flex-1">Auto Detect</span>
+                  <span className="text-[11px] font-bold block flex-1">Auto Detect</span>
                   {selectedSite === 'auto' && (
                     <svg className="w-3.5 h-3.5 shrink-0" fill="var(--accent)" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 1000-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   )}
                 </button>
-                <div className="h-px mx-2" style={{ background: 'var(--btn-border)' }} />
                 <button
                   onClick={() => { setSelectedSite('youtube'); setIsDropdownOpen(false); }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-all duration-150 active:scale-[0.98] cursor-pointer"
-                  style={{ color: 'var(--text)' }}
+                  className="w-full flex items-center gap-3 pl-4 pr-3 py-2 text-left transition-all duration-150 active:scale-[0.98] cursor-pointer rounded-lg"
+                  style={{ color: 'var(--text)', background: 'transparent' }}
                   onMouseEnter={(e) => e.currentTarget.style.background = 'var(--row-hover)'}
                   onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                 >
-                  <div className="flex items-center justify-center w-5 h-5 rounded-lg shrink-0" style={{ background: 'var(--btn-bg)' }}>
+                  <div className="flex items-center justify-center w-5 h-5 rounded-md shrink-0" style={{ background: 'var(--btn-bg)' }}>
                     {getSiteIcon('youtube')}
                   </div>
-                  <span className="text-[11px] font-semibold block flex-1">YouTube</span>
+                  <span className="text-[11px] font-bold block flex-1">YouTube</span>
                   {selectedSite === 'youtube' && (
                     <svg className="w-3.5 h-3.5 shrink-0" fill="var(--accent)" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 1000-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   )}
                 </button>
-                <div className="h-px mx-2" style={{ background: 'var(--btn-border)' }} />
                 <button
                   onClick={() => { setSelectedSite('instagram'); setIsDropdownOpen(false); }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-all duration-150 active:scale-[0.98] cursor-pointer"
-                  style={{ color: 'var(--text)' }}
+                  className="w-full flex items-center gap-3 pl-4 pr-3 py-2 text-left transition-all duration-150 active:scale-[0.98] cursor-pointer rounded-lg"
+                  style={{ color: 'var(--text)', background: 'transparent' }}
                   onMouseEnter={(e) => e.currentTarget.style.background = 'var(--row-hover)'}
                   onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                 >
-                  <div className="flex items-center justify-center w-5 h-5 rounded-lg shrink-0" style={{ background: 'var(--btn-bg)' }}>
+                  <div className="flex items-center justify-center w-5 h-5 rounded-md shrink-0" style={{ background: 'var(--btn-bg)' }}>
                     {getSiteIcon('instagram')}
                   </div>
-                  <span className="text-[11px] font-semibold block flex-1">Instagram</span>
+                  <span className="text-[11px] font-bold block flex-1">Instagram</span>
                   {selectedSite === 'instagram' && (
                     <svg className="w-3.5 h-3.5 shrink-0" fill="var(--accent)" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 1000-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />

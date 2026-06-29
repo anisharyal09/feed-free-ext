@@ -6,11 +6,11 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 #### Get it on:
 <p align="center">
   <a href="https://addons.mozilla.org/en-US/firefox/addon/feed-free-uf/">
-    <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-v1.2.1-FF7139?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" height="23" />
+    <img src="https://img.shields.io/badge/FIREFOX%20ADD--ON-v1.2.1-FF7139?style=flat-square&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-on" height="27" />
   </a>
   &nbsp;&nbsp;
   <a href="https://chromewebstore.google.com/detail/feed-free-unbiased-feed-f/fmmfdjmmjmkedafmhhdmoafbioakeefp">
-    <img src="https://img.shields.io/badge/CHROME%20WEB%20STORE-v1.2.1-4285F4?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome Web Store" height="23" />
+    <img src="https://img.shields.io/badge/CHROME%20WEB%20STORE-v1.2.1-4285F4?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome Web Store" height="27" />
   </a>
 </p>
 
@@ -40,7 +40,7 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 - **Hide Report History** — Remove Report History link from guide/sidebar.
 - **Hide Notifications** — Remove the notifications bell and activity links from the top bar and sidebar.
 - **Hide More from YouTube** — Remove the "More from YouTube" category block from the guide/sidebar.
-- **Audio Only Mode** — Black out the video player (keep audio playing) with a **draggable** floating toggle button on the player UI to switch back-and-forth directly, plus an optional screen visual overlay option.
+- **Audio Only Mode** — Black out the video player (keep audio playing) with a **draggable** floating toggle button on the player UI to switch back-and-forth directly, an optional screen visual overlay, and a keyboard shortcut (`'A'`) with a floating visual toast notification.
 - **Grayscale Mode** — Turn YouTube completely black & white.
 
 ### Instagram
@@ -61,6 +61,7 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 
 ### Global
 - **Master toggle** — Enable/disable all blocking at once (Feed Free Active / Inactive).
+- **Light/Dark Theme Toggle** — Dynamically switch between dark and light appearance modes with a button in the header.
 - **Real-time sync** — Changes apply across all open tabs instantly.
 - **SPA-proof** — Works through client-side navigation without requiring a page reload.
 - **Firefox + Chrome** — Supports both browsers from the same codebase.

@@ -15,9 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Unsupported Site Message**: Added a centered, snug warning card ("Oops!") shown dynamically when visiting unsupported websites.
 - **Scroll UX Indicator**: Introduced top and bottom gradient fade masks with a bouncing scroll arrow to signal scrollable options.
 - **Audio Only Mode Keyboard Shortcut**: Added key shortcut `'A'` on YouTube to toggle Audio Only Mode dynamically back and forth (active only when not typing in text fields).
+- **Reset Button Spin Animation**: Added an interactive spin animation to the Reset icon when clicked to provide responsive visual feedback.
 
 ### Changed
-- **Controls Layout**: Shifted the Reset button from the header to the controls row below, placing it side-by-side with the global Feed Free Toggle in a balanced layout.
+- **Controls Layout**: Shifted the Reset button from the header to the controls row below, placing it side-by-side with the global Feed Free Toggle in a balanced layout (with a keyboard shortcut hint added under settings).
 - Patched version to `v1.2.6` across all manifests and documentation.
 
 ## [v1.2.5] - 2026-06-28

@@ -24,16 +24,16 @@ export function Row({
       onClick={() => !disabled && onChange(!checked)}
       style={{ borderBottom: isLast ? 'none' : '1px solid var(--border)' }}
       className={[
-        'flex items-center justify-between py-3 px-[10px] transition-all duration-150 select-none min-h-[58px]',
+        'flex items-center justify-between py-3 px-[10px] select-none min-h-[58px] row-item',
         disabled
-          ? 'opacity-30 cursor-not-allowed'
-          : 'cursor-pointer hover:bg-white/[0.03] active:bg-white/[0.01]',
+          ? 'opacity-30 cursor-not-allowed disabled'
+          : 'cursor-pointer',
       ].join(' ')}
     >
       <div className="flex flex-col gap-0.5 pr-4 min-w-0">
         <span
           className="text-[13px] font-semibold tracking-tight transition-colors duration-150"
-          style={{ color: checked && !disabled ? 'var(--text)' : 'rgba(248, 250, 252, 0.85)' }}
+          style={{ color: checked && !disabled ? 'var(--text)' : 'var(--label-off)' }}
         >
           {label}
         </span>
