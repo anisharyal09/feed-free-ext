@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Auto Site Detection & Selector**: Introduced smart platform detection and a header-based dropdown menu to choose between sites manually.
 - **Unsupported Site Message**: Added a centered, snug warning card ("Oops!") shown dynamically when visiting unsupported websites.
 - **Scroll UX Indicator**: Introduced top and bottom gradient fade masks with a bouncing scroll arrow to signal scrollable options.
+- **Audio Only Mode Keyboard Shortcut**: Added key shortcut `'A'` on YouTube to toggle Audio Only Mode dynamically back and forth (active only when not typing in text fields).
 
 ### Changed
 - **Controls Layout**: Shifted the Reset button from the header to the controls row below, placing it side-by-side with the global Feed Free Toggle in a balanced layout.

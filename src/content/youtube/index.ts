@@ -960,6 +960,97 @@ function onYouTubeNavigate(): void {
   }
 }
 
+function isUserTyping(): boolean {
+  const active = document.activeElement
+  if (!active) return false
+  const tagName = active.tagName.toLowerCase()
+  return (
+    tagName === 'input' ||
+    tagName === 'textarea' ||
+    active.hasAttribute('contenteditable') ||
+    active.getAttribute('role') === 'textbox'
+  )
+}
+
+let activeFeedFreeToast: HTMLDivElement | null = null
+
+function showFeedFreeToast(message: string): void {
+  if (activeFeedFreeToast) {
+    activeFeedFreeToast.remove()
+  }
+
+  const toast = document.createElement('div')
+  toast.id = 'ff-status-toast'
+
+  const isDark = document.documentElement.hasAttribute('dark') ||
+    document.querySelector('html')?.getAttribute('system-tracker') === 'dark' ||
+    getComputedStyle(document.body).backgroundColor !== 'rgb(255, 255, 255)'
+
+  Object.assign(toast.style, {
+    position: 'fixed',
+    bottom: '60px',
+    left: '50%',
+    transform: 'translateX(-50%) translateY(20px)',
+    backgroundColor: isDark ? 'rgba(33, 33, 33, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+    color: isDark ? '#ffffff' : '#0f0f0f',
+    padding: '10px 18px',
+    borderRadius: '24px',
+    fontSize: '13px',
+    fontWeight: '600',
+    fontFamily: 'Roboto, Arial, sans-serif',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
+    border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.05)',
+    zIndex: '100000',
+    opacity: '0',
+    transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+  })
+
+  toast.textContent = message
+  document.body.appendChild(toast)
+  activeFeedFreeToast = toast
+
+  requestAnimationFrame(() => {
+    toast.style.transform = 'translateX(-50%) translateY(0)'
+    toast.style.opacity = '1'
+  })
+
+  setTimeout(() => {
+    toast.style.transform = 'translateX(-50%) translateY(20px)'
+    toast.style.opacity = '0'
+    setTimeout(() => {
+      toast.remove()
+      if (activeFeedFreeToast === toast) {
+        activeFeedFreeToast = null
+      }
+    }, 250)
+  }, 2000)
+}
+
+async function toggleAudioOnlyMode(): Promise<void> {
+  try {
+    const s = await loadState()
+    const nextMode = !s.youtube.musicOnlyMode
+    s.youtube.musicOnlyMode = nextMode
+    await saveState(s)
+    showFeedFreeToast(nextMode ? 'Audio Mode: Enabled 🎧' : 'Audio Mode: Disabled 📺')
+  } catch (e) {
+    err('Failed to toggle musicOnlyMode via shortcut:', e)
+  }
+}
+
+function handleKeyboardShortcut(e: KeyboardEvent): void {
+  if (!currentState || !currentState.globalEnabled) return
+  if ((e.key === 'a' || e.key === 'A') && !isUserTyping() && !e.ctrlKey && !e.altKey && !e.metaKey) {
+    e.preventDefault()
+    e.stopPropagation()
+    toggleAudioOnlyMode()
+  }
+}
+
 async function init(): Promise<void> {
   log('Content script starting...')
 
@@ -986,6 +1077,7 @@ async function init(): Promise<void> {
     }
 
     document.addEventListener('yt-navigate-finish', onYouTubeNavigate)
+    document.addEventListener('keydown', handleKeyboardShortcut)
     onStateChanged(handleStateChange)
     pollState(handleStateChange)
     log('Content script initialized')
