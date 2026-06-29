@@ -222,4 +222,4 @@ Feed Free - Unbiased Feed (FF-UF) is built with privacy in mind. It operates ent
 
 ## License
 
-MIT
+Apache 2.0
