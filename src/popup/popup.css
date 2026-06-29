@@ -15,11 +15,55 @@
   --text: #f8fafc;
   --muted: #94a3b8;
   
-  /* Brand/Status Accents */
+    /* Brand/Status Accents */
   --accent: #10b981;
   --accent-glow: rgba(16, 185, 129, 0.15);
   --youtube: #ef4444;
   --instagram: #d946ef;
+
+  /* Theme-aware surface utilities */
+  --btn-bg: rgba(255, 255, 255, 0.04);
+  --btn-border: rgba(255, 255, 255, 0.06);
+  --btn-hover-bg: rgba(255, 255, 255, 0.08);
+  --row-hover: rgba(255, 255, 255, 0.03);
+  --row-active: rgba(255, 255, 255, 0.01);
+  --header-border: rgba(255, 255, 255, 0.04);
+  --dropdown-bg: rgba(2, 6, 23, 0.4);
+  --dropdown-menu-bg: rgba(2, 6, 23, 0.95);
+  --label-off: rgba(248, 250, 252, 0.85);
+}
+
+#popup-root {
+  transition: background-color 0.3s ease, color 0.3s ease, background-image 0.3s ease;
+}
+
+[data-theme="light"] {
+  --bg: #f1f5f9;
+  --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  --surface: rgba(255, 255, 255, 0.85);
+  --surface-border: #e2e8f0;
+  --border: #cbd5e1;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #059669;
+  --accent-glow: rgba(5, 150, 105, 0.12);
+
+  --btn-bg: rgba(0, 0, 0, 0.04);
+  --btn-border: rgba(0, 0, 0, 0.08);
+  --btn-hover-bg: rgba(0, 0, 0, 0.08);
+  --row-hover: rgba(0, 0, 0, 0.03);
+  --row-active: rgba(0, 0, 0, 0.01);
+  --header-border: rgba(0, 0, 0, 0.06);
+  --dropdown-bg: rgba(248, 250, 252, 0.8);
+  --dropdown-menu-bg: rgba(255, 255, 255, 0.95);
+  --label-off: rgba(15, 23, 42, 0.85);
+}
+
+[data-theme="light"] .tooltip::after {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 html, body, #root {
@@ -84,6 +128,47 @@ body {
 
 .animate-fade-in {
   animation: fade-in 0.15s ease-out forwards;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-dropdown-in {
+  animation: dropdown-in 0.18s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Row hover/active — theme-aware */
+.row-item { transition: background-color 0.15s ease; }
+.row-item:not(.disabled):hover { background-color: var(--row-hover); }
+.row-item:not(.disabled):active { background-color: var(--row-active); }
+
+/* Scroll bounce arrow */
+@keyframes scroll-arrow-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.3; }
+  50% { transform: translateY(3px); opacity: 0.8; }
+}
+
+.animate-scroll-arrow {
+  animation: scroll-arrow-bounce 1.5s ease-in-out infinite;
+}
+
+/* Fade mask at bottom of scrollable container */
+.fade-mask {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  pointer-events: none;
+  background: linear-gradient(to top, var(--surface) 0%, transparent 100%);
 }
 
 /* Custom pure CSS tooltip */

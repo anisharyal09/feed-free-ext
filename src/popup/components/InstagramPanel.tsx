@@ -14,6 +14,7 @@ export function InstagramPanel() {
 
   return (
     <div className="flex flex-col">
+      {/* Feed & Navigation */}
       <Row
         label="Redirect Home to Following"
         hint="Instead of Home Feed, redirects to Following feed"
@@ -23,7 +24,7 @@ export function InstagramPanel() {
         onChange={(v) => setInstagram({ forceChronological: v })}
       />
       <Row
-        label="Redirect to DMs from Home"
+        label="Redirect Home to DMs"
         hint="Go straight to messages instead of feed"
         checked={redirectOn}
         disabled={disabled}
@@ -50,11 +51,11 @@ export function InstagramPanel() {
           <div className="flex gap-2">
             <button
               onClick={() => setInstagram({ conflictRedirectTarget: 'profile' })}
-              className="flex-1 py-1.5 text-[11px] font-bold rounded-md transition-all duration-150 cursor-pointer border border-transparent"
+              className="flex-1 py-1.5 text-[11px] font-bold rounded-md transition-all duration-150 cursor-pointer border"
               style={{
-                background: target === 'profile' ? 'var(--instagram)' : 'rgba(255, 255, 255, 0.04)',
-                color: '#fff',
-                borderColor: target === 'profile' ? 'transparent' : 'var(--border)',
+                background: target === 'profile' ? 'var(--instagram)' : 'var(--btn-bg)',
+                color: target === 'profile' ? '#fff' : 'var(--muted)',
+                borderColor: target === 'profile' ? 'transparent' : 'var(--btn-border)',
                 boxShadow: target === 'profile' ? '0 2px 8px rgba(217, 70, 239, 0.25)' : 'none'
               }}
             >
@@ -62,11 +63,11 @@ export function InstagramPanel() {
             </button>
             <button
               onClick={() => setInstagram({ conflictRedirectTarget: 'saved' })}
-              className="flex-1 py-1.5 text-[11px] font-bold rounded-md transition-all duration-150 cursor-pointer border border-transparent"
+              className="flex-1 py-1.5 text-[11px] font-bold rounded-md transition-all duration-150 cursor-pointer border"
               style={{
-                background: target === 'saved' ? 'var(--instagram)' : 'rgba(255, 255, 255, 0.04)',
-                color: '#fff',
-                borderColor: target === 'saved' ? 'transparent' : 'var(--border)',
+                background: target === 'saved' ? 'var(--instagram)' : 'var(--btn-bg)',
+                color: target === 'saved' ? '#fff' : 'var(--muted)',
+                borderColor: target === 'saved' ? 'transparent' : 'var(--btn-border)',
                 boxShadow: target === 'saved' ? '0 2px 8px rgba(217, 70, 239, 0.25)' : 'none'
               }}
             >
@@ -76,6 +77,7 @@ export function InstagramPanel() {
         </div>
       )}
 
+      {/* Content Hiding */}
       <Row
         label="Hide Reels"
         hint="Block Reels from navigation & redirects"
@@ -92,7 +94,6 @@ export function InstagramPanel() {
         activeColor={activeColor}
         onChange={(v) => setInstagram({ nukeExplore: v })}
       />
-
       <Row
         label="Hide Stories (Home)"
         hint="Remove the stories tray from the home feed"
@@ -118,15 +119,7 @@ export function InstagramPanel() {
         />
       </div>
 
-      <Row
-        label="Square Profile Photos"
-        hint="Render profile avatars as perfect squares"
-        checked={state.instagram.squareProfile}
-        disabled={disabled}
-        activeColor={activeColor}
-        onChange={(v) => setInstagram({ squareProfile: v })}
-      />
-
+      {/* UI Tweaks */}
       <Row
         label="Hide Notes"
         hint="Block status note bubbles from profiles and inbox"
@@ -135,7 +128,6 @@ export function InstagramPanel() {
         activeColor={activeColor}
         onChange={(v) => setInstagram({ nukeNotes: v })}
       />
-
       <Row
         label="Hide Comments & Likes Count"
         hint="Hide comments, comments count, and post likes count"
@@ -161,6 +153,16 @@ export function InstagramPanel() {
         onChange={(v) => setInstagram({ nukeDashboard: v })}
       />
       <Row
+        label="Square Profile Photos"
+        hint="Render profile avatars as perfect squares"
+        checked={state.instagram.squareProfile}
+        disabled={disabled}
+        activeColor={activeColor}
+        onChange={(v) => setInstagram({ squareProfile: v })}
+      />
+
+      {/* Appearance Modes */}
+      <Row
         label="Grayscale Mode"
         hint="Turn Instagram completely black & white"
         checked={state.instagram.grayMode}
@@ -169,7 +171,7 @@ export function InstagramPanel() {
         isLast
         onChange={(v) => setInstagram({ grayMode: v })}
       />
-      <div style={{ height: '24px' }} />
+
     </div>
   )
 }
