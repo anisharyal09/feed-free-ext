@@ -150,6 +150,16 @@ body {
 .row-item:not(.disabled):hover { background-color: var(--row-hover); }
 .row-item:not(.disabled):active { background-color: var(--row-active); }
 
+/* Reset icon rotation effect */
+@keyframes spin-once {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-spin-once {
+  animation: spin-once 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
 /* Scroll bounce arrow */
 @keyframes scroll-arrow-bounce {
   0%, 100% { transform: translateY(0); opacity: 0.3; }

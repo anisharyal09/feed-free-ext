@@ -116,7 +116,7 @@ export function YouTubePanel() {
       />
       <Row
         label="Audio Only Mode"
-        hint="Black out video, keep audio playing"
+        hint="Black out video, keep audio playing (Press 'A' on page to toggle)"
         checked={state.youtube.musicOnlyMode}
         disabled={disabled}
         activeColor={activeColor}

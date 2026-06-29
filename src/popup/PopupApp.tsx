@@ -68,6 +68,7 @@ export default function PopupApp() {
   const [showBottomFade, setShowBottomFade] = useState(true)
   const [showTopFade, setShowTopFade] = useState(false)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const [isResetting, setIsResetting] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -281,9 +282,9 @@ export default function PopupApp() {
             onClick={() => setGlobal(!globalEnabled)}
             className="w-full rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-2.5 hover:brightness-110 active:scale-[0.98]"
             style={{
-              height: '36px',
-              paddingLeft: '13px',
-              paddingRight: '13px',
+              height: '32px',
+              paddingLeft: '11px',
+              paddingRight: '11px',
               background: globalEnabled
                 ? 'linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.03))'
                 : 'var(--surface)',
@@ -315,13 +316,13 @@ export default function PopupApp() {
                 style={{
                   backgroundColor: globalEnabled ? 'var(--accent)' : 'var(--border)',
                 }}
-                className="relative w-[34px] h-[18px] rounded-full transition-all duration-200"
+                className="relative w-[30px] h-[16px] rounded-full transition-all duration-200"
               >
                 <div
                   style={{
                     backgroundColor: '#fff',
                   }}
-                  className={`absolute top-[3px] left-[3px] w-[12px] h-[12px] rounded-full transition-transform duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.2)] ${globalEnabled ? 'translate-x-[16px]' : 'translate-x-0'}`}
+                  className={`absolute top-[3px] left-[3px] w-[10px] h-[10px] rounded-full transition-transform duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.2)] ${globalEnabled ? 'translate-x-[14px]' : 'translate-x-0'}`}
                 />
               </div>
             </div>
@@ -331,12 +332,16 @@ export default function PopupApp() {
         {/* Reset Button */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <button
-            onClick={resetAll}
-            style={{ height: '36px', background: 'var(--btn-bg)', borderColor: 'var(--btn-border)', paddingLeft: '13px', paddingRight: '13px' }}
+            onClick={() => {
+              setIsResetting(true)
+              resetAll()
+              setTimeout(() => setIsResetting(false), 600)
+            }}
+            style={{ height: '32px', background: 'var(--btn-bg)', borderColor: 'var(--btn-border)', paddingLeft: '11px', paddingRight: '11px' }}
             className="w-full rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 hover:brightness-110 active:scale-[0.98]"
             title="Reset All Settings"
           >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="var(--muted)" strokeWidth="2.5" viewBox="0 0 24 24">
+            <svg className={`w-3.5 h-3.5 ${isResetting ? 'animate-spin-once' : ''}`} fill="none" stroke="var(--muted)" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
             <span className="text-[12px] font-bold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Reset</span>
