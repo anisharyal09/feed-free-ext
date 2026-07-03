@@ -18,7 +18,13 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
   <img src="assets/youtube.png" alt="YouTube Feed Free" width="49%" />
   <img src="assets/instagram.png" alt="Instagram Feed Free" width="49%" />
   <br>
-  <em>Screenshots of Popup UI with Youtube and Instagram Controls (Left | Right).</em>
+  <em>Updated Popup UI with YouTube (dark theme) and Instagram (light theme) controls, theme toggle & site selector.</em>
+</p>
+
+<p align="center">
+  <img src="assets/oops.png" alt="Unsupported Site" width="49%" />
+  <br>
+  <em>Oops page with default message.</em>
 </p>
 
 ---
@@ -30,7 +36,7 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 ### YouTube
 - **Hide Home Feed** — Remove the algorithmic video grid from youtube.com.
 - **Hide Shorts** — Remove Shorts from homepage, sidebar, and channel profile pages.
-- **Hide Search Shorts** — Remove Shorts shelves and video results completely from search pages, with a smart warning notice at the top-center of the page when results are hidden.
+- **Hide Search Shorts** — Remove Shorts shelves and video results completely from search pages, with a smart auto-dismissing toast at the top-center of the page notifying you when results are hidden.
 - **Hide Recommendations** — Clear suggested recommendations next to/below the player and playlist pages (leaves playlists visible).
 - **Hide Entire Sidebar** — Completely hide the sidebar, stretching the video player to full width.
 - **Hide Comments** — Remove the entire comments section.
@@ -46,7 +52,7 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 ### Instagram
 - **Following Feed** — Auto-redirect to the Following timeline instead of the algorithmic Home feed.
 - **Redirect to DMs** — Go straight to `/direct/inbox/` on open instead of the feed.
-- **Hide DMs** — Remove DM navigation (including header/sidebar Message buttons, the floating bottom-right Messages button, and unread count badges) and redirect away from the messages inbox.
+- **Hide DMs** — Remove DM navigation (header/sidebar Message buttons, floating bottom-right Messages pill, unread count badges) and redirect away from the messages inbox.
 - **Hide Reels** — Remove Reels from sidebar/navigation menus (keeping profile reels visible) and auto-redirect away from `/reels/`.
 - **Hide Explore** — Remove the Explore tab and auto-redirect.
 - **Hide Professional Dashboard** — Remove Professional Dashboard link and icon from the sidebar navigation on creator/business profiles.
@@ -55,12 +61,13 @@ Take control of your social media feeds. Block algorithmic recommendations, Shor
 - **Square Profile Photos** — Render profile pictures and story rings as soft squares.
 - **Hide Notes** — Block status note bubbles from profiles and inbox.
 - **Hide Comments & Likes Count** — Hide comment sections, comments count, and post likes count (while keeping the interactive Like, Comment, Share, and Save button icons visible).
-- **Hide Notifications** — Remove notifications tab from sidebar and hide floating notification tooltips (Like/Comment/Follow indicators).
+- **Hide Notifications** — Remove notifications tab from sidebar, hide floating notification tooltips (Like/Comment/Follow popups), and strip unread badges.
 - **Conflict Resolution** — Choose redirect target (Profile or Saved) when both "Redirect to DMs" and "Hide DMs" are enabled simultaneously.
 - **Grayscale Mode** — Turn Instagram completely black & white.
 
 ### Global
 - **Master toggle** — Enable/disable all blocking at once (Feed Free Active / Inactive).
+- **Auto Site Detection & Selector** — Smart platform detection with a manual dropdown to switch between YouTube, Instagram, or Auto mode. Shows a friendly unsupported site message with supported platform info when visiting other sites.
 - **Light/Dark Theme Toggle** — Dynamically switch between dark and light appearance modes with a button in the header.
 - **Real-time sync** — Changes apply across all open tabs instantly.
 - **SPA-proof** — Works through client-side navigation without requiring a page reload.

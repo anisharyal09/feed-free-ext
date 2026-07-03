@@ -329,54 +329,45 @@ export default function PopupApp() {
         </div>
 
         {/* Reset Button */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <button
-            onClick={() => {
-              setIsResetting(true)
-              resetAll()
-              setTimeout(() => setIsResetting(false), 600)
-            }}
-            style={{ height: '32px', background: 'var(--btn-bg)', borderColor: 'var(--btn-border)', paddingLeft: '11px', paddingRight: '11px' }}
-            className="w-full rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 hover:brightness-110 active:scale-[0.98]"
-            title="Reset All Settings"
-          >
-            <svg className={`w-3.5 h-3.5 ${isResetting ? 'animate-spin-once' : ''}`} fill="none" stroke="var(--muted)" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-            </svg>
-            <span className="text-[12px] font-bold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Reset</span>
-          </button>
-        </div>
+        {!showUnsupportedMessage && (
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <button
+              onClick={() => {
+                setIsResetting(true)
+                resetAll()
+                setTimeout(() => setIsResetting(false), 600)
+              }}
+              style={{ height: '32px', background: 'var(--btn-bg)', borderColor: 'var(--btn-border)', paddingLeft: '11px', paddingRight: '11px' }}
+              className="w-full rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 hover:brightness-110 active:scale-[0.98]"
+              title="Reset All Settings"
+            >
+              <svg className={`w-3.5 h-3.5 ${isResetting ? 'animate-spin-once' : ''}`} fill="none" stroke="var(--muted)" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+              <span className="text-[12px] font-bold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Reset</span>
+            </button>
+          </div>
+        )}
       </section>
 
       {showUnsupportedMessage && (
-        <section className="flex-1 flex items-center justify-center px-1">
-          <div className="rounded-2xl border text-center animate-fade-in w-full flex flex-col items-center justify-center"
-            style={{
-              background: 'var(--surface)',
-              borderColor: 'var(--surface-border)',
-              padding: '32px 24px',
-              minHeight: '220px',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
-            }}
-          >
-            <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-              style={{
-                background: 'rgba(251, 146, 60, 0.1)',
-                border: '1.5px solid rgba(251, 146, 60, 0.25)',
-                boxShadow: '0 0 20px rgba(251, 146, 60, 0.05)',
-              }}>
-              <svg className="w-6 h-6" fill="none" stroke="rgb(251, 146, 60)" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-            </div>
-            <h3 className="text-[16px] font-extrabold tracking-wide" style={{ color: 'var(--text)' }}>Oops!</h3>
-            <div className="h-px w-10 my-3" style={{ background: 'var(--border)' }} />
-            <p className="text-[12.5px] font-bold mb-1.5 leading-relaxed" style={{ color: 'var(--text)', letterSpacing: '-0.01em' }}>
-              Feed Free is not supported for this website.
-            </p>
-            <p className="text-[11px] leading-relaxed" style={{ color: 'var(--muted)', opacity: 0.9 }}>
-              Currently works on YouTube & Instagram only.
-            </p>
+        <section className="flex-1 flex flex-col items-center justify-center gap-3 animate-fade-in px-2"
+          style={{ minHeight: '220px' }}
+        >
+          <h3 className="text-[16px] font-extrabold tracking-wide" style={{ color: 'var(--text)' }}>
+            Oops!
+          </h3>
+          <div className="h-px w-6" style={{ background: 'var(--border)' }} />
+          <p className="text-[12px] font-bold leading-relaxed" style={{ color: 'var(--muted)' }}>
+            This site isn't supported yet.
+          </p>
+          <p className="text-[10.5px] font-semibold" style={{ color: 'var(--muted)', opacity: 0.6 }}>
+            Works on
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-extrabold" style={{ color: 'var(--youtube)' }}>YouTube</span>
+            <span className="text-[11px] font-semibold" style={{ color: 'var(--muted)', opacity: 0.4 }}>/</span>
+            <span className="text-[11px] font-extrabold" style={{ color: 'var(--instagram)' }}>Instagram</span>
           </div>
         </section>
       )}
