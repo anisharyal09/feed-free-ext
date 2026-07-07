@@ -431,11 +431,11 @@ export default function PopupApp() {
           }}
         />
         <a
-          href="https://github.com/anisharyal09/feed-free-ext#support--feedback"
+          href="https://github.com/anisharyal09/feed-free-ext/blob/main/SUPPORT.md"
           target="_blank"
           rel="noopener noreferrer"
           className="tooltip flex items-center active:scale-95 transition-all duration-150 opacity-60 hover:opacity-100 hover:scale-110"
-          data-tooltip="Support & Feedback"
+          data-tooltip="Contact / Feedback"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" style={{ color: 'var(--accent)' }}>
             <circle cx="12" cy="12" r="10" />
