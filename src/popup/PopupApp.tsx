@@ -431,14 +431,19 @@ export default function PopupApp() {
           }}
         />
         <a
-          href="https://github.com/anisharyal09/feed-free-ext"
+          href="https://github.com/anisharyal09/feed-free-ext#support--feedback"
           target="_blank"
           rel="noopener noreferrer"
           className="tooltip flex items-center active:scale-95 transition-all duration-150 opacity-60 hover:opacity-100 hover:scale-110"
-          data-tooltip="100% Local & Secure - GitHub Repo"
+          data-tooltip="Support & Feedback"
         >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" style={{ color: 'var(--accent)' }}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" style={{ color: 'var(--accent)' }}>
+            <circle cx="12" cy="12" r="10" />
+            <path d="m4.93 4.93 4.24 4.24" />
+            <path d="m14.83 9.17 4.24-4.24" />
+            <path d="m14.83 14.83 4.24 4.24" />
+            <path d="m9.17 14.83-4.24 4.24" />
+            <circle cx="12" cy="12" r="4" />
           </svg>
         </a>
         <a
