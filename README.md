@@ -230,3 +230,7 @@ Feed Free - Unbiased Feed (FF-UF) is built with privacy in mind. It operates ent
 ## License
 
 Apache 2.0
+
+---
+
+mozilla-site-verification=76d1b238f79b4083a05580c414d50d97
