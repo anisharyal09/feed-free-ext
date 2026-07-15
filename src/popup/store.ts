@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { FeedFreeState, YouTubeState, InstagramState } from '../types'
 import { loadState, saveState, onStateChanged } from '../utils/storage'
-import { createDefaultState } from '../config/defaults'
+import { createDefaultState, DEFAULT_YOUTUBE, DEFAULT_INSTAGRAM } from '../config/defaults'
 
 interface StoreState {
   state: FeedFreeState
@@ -10,7 +10,7 @@ interface StoreState {
   setGlobal: (enabled: boolean) => Promise<void>
   setYouTube: (partial: Partial<YouTubeState>) => Promise<void>
   setInstagram: (partial: Partial<InstagramState>) => Promise<void>
-  resetAll: () => Promise<void>
+  resetAll: (site?: 'youtube' | 'instagram') => Promise<void>
 }
 
 async function persist(
@@ -77,10 +77,24 @@ export const useStore = create<StoreState>((set, get) => ({
     broadcast(next)
   },
 
-  resetAll: async () => {
-    const defaults = createDefaultState()
-    await saveState(defaults)
-    set({ state: defaults })
-    broadcast(defaults)
+  resetAll: async (site) => {
+    const current = get().state
+    let next: FeedFreeState
+    if (site === 'youtube') {
+      next = {
+        ...current,
+        youtube: { ...DEFAULT_YOUTUBE },
+      }
+    } else if (site === 'instagram') {
+      next = {
+        ...current,
+        instagram: { ...DEFAULT_INSTAGRAM },
+      }
+    } else {
+      next = createDefaultState()
+    }
+    await saveState(next)
+    set({ state: next })
+    broadcast(next)
   },
 }))

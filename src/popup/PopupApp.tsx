@@ -329,25 +329,41 @@ export default function PopupApp() {
         </div>
 
         {/* Reset Button */}
-        {!showUnsupportedMessage && (
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <button
-              onClick={() => {
-                setIsResetting(true)
-                resetAll()
-                setTimeout(() => setIsResetting(false), 600)
-              }}
-              style={{ height: '32px', background: 'var(--btn-bg)', borderColor: 'var(--btn-border)', paddingLeft: '11px', paddingRight: '11px' }}
-              className="w-full rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 hover:brightness-110 active:scale-[0.98]"
-              title="Reset All Settings"
-            >
-              <svg className={`w-3.5 h-3.5 ${isResetting ? 'animate-spin-once' : ''}`} fill="none" stroke="var(--muted)" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-              </svg>
-              <span className="text-[12px] font-bold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Reset</span>
-            </button>
-          </div>
-        )}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <button
+            disabled={showUnsupportedMessage}
+            onClick={() => {
+              setIsResetting(true)
+              const resetTarget = effectiveSite === 'youtube' || effectiveSite === 'instagram' ? effectiveSite : undefined
+              resetAll(resetTarget)
+              setTimeout(() => setIsResetting(false), 600)
+            }}
+            style={{
+              height: '32px',
+              background: 'var(--btn-bg)',
+              borderColor: 'var(--btn-border)',
+              paddingLeft: '11px',
+              paddingRight: '11px',
+              opacity: showUnsupportedMessage ? 0.4 : 1,
+              cursor: showUnsupportedMessage ? 'not-allowed' : 'pointer',
+            }}
+            className={`w-full rounded-xl border transition-all duration-200 flex items-center justify-center gap-1.5 ${showUnsupportedMessage ? '' : 'hover:brightness-110 active:scale-[0.98]'}`}
+            title={
+              showUnsupportedMessage
+                ? 'Reset Disabled (Unsupported Site)'
+                : effectiveSite === 'youtube'
+                ? 'Reset YouTube Settings'
+                : effectiveSite === 'instagram'
+                ? 'Reset Instagram Settings'
+                : 'Reset All Settings'
+            }
+          >
+            <svg className={`w-3.5 h-3.5 ${isResetting ? 'animate-spin-once' : ''}`} fill="none" stroke="var(--muted)" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            <span className="text-[12px] font-bold uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Reset</span>
+          </button>
+        </div>
       </section>
 
       {showUnsupportedMessage && (
@@ -438,25 +454,23 @@ export default function PopupApp() {
           data-tooltip="Contact / Feedback"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" style={{ color: 'var(--accent)' }}>
-            <circle cx="12" cy="12" r="10" />
-            <path d="m4.93 4.93 4.24 4.24" />
-            <path d="m14.83 9.17 4.24-4.24" />
-            <path d="m14.83 14.83 4.24 4.24" />
-            <path d="m9.17 14.83-4.24 4.24" />
-            <circle cx="12" cy="12" r="4" />
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
           </svg>
         </a>
-        <a
-          href="https://anisharyal09.com.np/support?from=feed-free"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="tooltip flex items-center active:scale-95 transition-all duration-150 opacity-60 hover:opacity-100 hover:scale-110"
-          data-tooltip="Support me <3"
-        >
-          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--accent)' }}>
-            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-          </svg>
-        </a>
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-0 top-[12px] flex items-center justify-center">
+          <a
+            href="https://anisharyal09.com.np/support?from=feed-free"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="tooltip flex items-center active:scale-95 transition-all duration-150 opacity-60 hover:opacity-100 hover:scale-110"
+            data-tooltip="Support me <3"
+          >
+            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--accent)' }}>
+              <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+            </svg>
+          </a>
+        </div>
         <a
           href="https://github.com/anisharyal09/feed-free-ext/blob/main/CHANGELOG.md"
           target="_blank"

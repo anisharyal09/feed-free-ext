@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.2.7] - 2026-07-15
+
+### Changed
+- **Reset Options Scope**: Restructured the Reset button behavior so that clicking it resets options only for the currently active platform (YouTube or Instagram) rather than wiping all extension settings.
+- **Reset Button on Unsupported Pages**: The Reset button is now rendered but disabled (with reduced opacity and helper tooltips) when browsing unsupported websites ("Oops" view) instead of being hidden.
+- **Footer Layout & Icons**: Centered the bottom support heart icon absolutely to guarantee precise horizontal alignment, and updated the contact/feedback icon to a standard envelope design.
+- **Mobile Domain Matching for Testing**: Expanded manifest matching patterns to wildcard domains (`*.youtube.com` and `*.instagram.com`) to allow testing and development on mobile versions of supported sites.
+
 ## [v1.2.6] - 2026-06-30
 
 ### Added
