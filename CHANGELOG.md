@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.3.0] - 2026-07-18
+
+> [!WARNING]
+> Mobile support for Firefox Android is in an initial, experimental testing phase. Some features may not function fully on mobile and are subject to further testing and changes.
+
+### Added
+- **Initial Mobile Support (Firefox Android Add-on)**: Added initial, basic mobile layout support and adjustments specifically for Firefox Android (experimental).
+- **YouTube Mobile Selectors**: Added and qualified selectors for mobile recommendations, comments, and Shorts.
+- **Instagram Mobile Selectors**: Added selectors to collapse bottom nav bar spacing for hidden items.
+
+### Changed
+- **Touch-Isolated Mobile Overrides**: Isolated mobile popup dimensions to touch-only screen media queries (`hover: none`) to prevent modifying desktop layout.
+
+### Fixed
+- **Instagram Reels Viewer Hiding**: Removed generated class selectors that broke profile Reels viewing when comments/likes were hidden.
+- **Firefox Layout Squeezing**: Added `scrollbar-width: thin` to keep Firefox layout consistent with Chrome scrollbar sizing.
+- **Desktop Popup Sizing**: Restored and protected original desktop styling.
+
+---
+
 ## [v1.2.7] - 2026-07-15
 
 ### Changed

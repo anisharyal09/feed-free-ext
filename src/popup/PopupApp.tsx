@@ -9,7 +9,7 @@ type SelectedSite = 'auto' | 'youtube' | 'instagram'
 
 async function detectSite(): Promise<Site> {
   try {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    const [tab] = await chrome.tabs.query({ active: true })
     const url = tab?.url ?? ''
     if (url.includes('youtube.com')) return 'youtube'
     if (url.includes('instagram.com')) return 'instagram'
@@ -121,7 +121,7 @@ export default function PopupApp() {
   if (!loaded) {
     return (
       <div
-        className="flex items-center justify-center"
+        className="flex items-center justify-center popup-loading"
         style={{ width: '100%', height: '480px', background: 'var(--bg)' }}
       >
         <div

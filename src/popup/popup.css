@@ -67,11 +67,19 @@
 }
 
 html, body, #root {
-  width: 360px;
+  width: 360px !important;
+  max-width: 360px !important;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: hidden !important;
+  overflow-x: hidden !important;
+}
+
+#popup-root {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box;
 }
 
 body {
@@ -85,6 +93,10 @@ body {
 }
 
 /* Custom Scrollbar Styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -224,4 +236,25 @@ body {
   left: auto;
   right: 0;
   transform-origin: bottom right;
+}
+
+@media (max-width: 600px) and (hover: none) {
+  html, body, #root {
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 100% !important;
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  #popup-root {
+    min-height: 100vh !important;
+    max-height: none !important;
+    height: 100% !important;
+  }
+
+  .popup-loading {
+    height: 100vh !important;
+  }
 }

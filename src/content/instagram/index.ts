@@ -116,23 +116,39 @@ function handleRedirect(state: FeedFreeState): boolean {
     }
 
     const isMainFeed = path === '/' || path === ''
-    if (!isMainFeed) return false
+    if (!isMainFeed) {
+      if (!path.startsWith('/direct')) {
+        sessionStorage.removeItem('ff_redirected_to_dms')
+      }
+      return false
+    }
 
     if (state.instagram.nukeMainFeed) {
-      if (state.instagram.blockDMs) {
-        const target = state.instagram.conflictRedirectTarget
-        if (target === 'saved') {
+      if (sessionStorage.getItem('ff_redirected_to_dms') === 'true') {
+        sessionStorage.removeItem('ff_redirected_to_dms')
+        const username = getUsernameFromProfileUrl(getProfileUrl())
+        if (username) {
+          log('Back button loop detected: redirecting to profile instead of DMs')
+          location.replace(`/${username}/`)
+          return true
+        }
+      } else {
+        if (state.instagram.blockDMs) {
+          const target = state.instagram.conflictRedirectTarget
+          if (target === 'saved') {
+            const username = getUsernameFromProfileUrl(getProfileUrl())
+            if (username) { log('nukeMainFeed + blockDMs — redirecting to saved'); location.replace(`/${username}/saved/`); return true }
+            return false
+          }
           const username = getUsernameFromProfileUrl(getProfileUrl())
-          if (username) { log('nukeMainFeed + blockDMs — redirecting to saved'); location.replace(`/${username}/saved/`); return true }
+          if (username) { log('nukeMainFeed + blockDMs — redirecting to profile'); location.replace(`/${username}/`); return true }
           return false
         }
-        const username = getUsernameFromProfileUrl(getProfileUrl())
-        if (username) { log('nukeMainFeed + blockDMs — redirecting to profile'); location.replace(`/${username}/`); return true }
-        return false
+        log('nukeMainFeed — redirecting to DMs')
+        sessionStorage.setItem('ff_redirected_to_dms', 'true')
+        location.replace('/direct/inbox/')
+        return true
       }
-      log('nukeMainFeed — redirecting to DMs')
-      location.replace('/direct/inbox/')
-      return true
     }
 
     if (state.instagram.forceChronological) {
